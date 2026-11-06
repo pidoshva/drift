@@ -1,0 +1,24 @@
+{
+  "nav": [],
+  "hero": {
+    "headline": "",
+    "subheadline": "",
+    "ctaLabel": "Browse inventory",
+    "imageUrl": ""
+  },
+  "highlights": [
+    { "title": "Inspected & detailed", "text": "Every car is checked and cleaned before it hits the lot." },
+    { "title": "Straightforward pricing", "text": "The price you see is the price you pay. No surprise fees." },
+    { "title": "Financing available", "text": "All credit welcome. Trade-ins accepted." }
+  ],
+  "labels": {
+    "inventory": "Inventory",
+    "sold": "Recently sold",
+    "contact": "Contact",
+    "callNow": "Call now",
+    "askAbout": "Ask about this car",
+    "viewOnKsl": "View on KSL",
+    "footerNote": ""
+  },
+  "cardFields": ["mileage", "transmission", "drive"]
+}

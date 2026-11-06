@@ -1,0 +1,67 @@
+# Inventory sync → commit data → build site → deploy GitHub Pages.
+# Schedule is managed by `drift schedule set sync --every 2h` (edits the tagged line below).
+name: sync
+on:
+  schedule:
+    - cron: '17 */2 * * *'  # drift:sync-cron
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Re-fetch every listing detail'
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths: ['src/**', 'data/**', 'drift.config.json', 'package.json', 'pnpm-lock.yaml', '.github/workflows/sync.yml']
+
+concurrency:
+  group: sync
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  sync-build-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Sync inventory
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          DRIFT_ADMIN_TOKEN: ${{ secrets.DRIFT_ADMIN_TOKEN }}
+          DRIFT_MOCK_KSL: ${{ vars.DRIFT_MOCK_KSL }}
+        run: node ./bin/drift sync ${{ inputs.force && '--force' || '' }}
+
+      - name: Commit inventory changes
+        run: |
+          if git diff --quiet -- data; then echo "no inventory changes"; exit 0; fi
+          git config user.name "drift-bot"
+          git config user.email "drift-bot@users.noreply.github.com"
+          git add data
+          git commit -m "sync: inventory $(date -u +%Y-%m-%dT%H:%MZ)"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: Build site
+        run: node ./bin/drift build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4

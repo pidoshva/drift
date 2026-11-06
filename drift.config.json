@@ -1,0 +1,65 @@
+{
+  "dealer": {
+    "name": "Demo Motors",
+    "tagline": "Quality used cars in Salt Lake City. Fair prices, no games.",
+    "about": "Demo Motors is a small family-run lot. Every car is inspected and detailed before it goes up for sale, and we are happy to send extra photos or walk you through a vehicle over the phone.",
+    "phoneDisplay": "(801) 555-0100",
+    "address": "1234 S State St",
+    "city": "Salt Lake City, UT 84115",
+    "hours": [
+      "Mon–Fri 9am–7pm",
+      "Sat 10am–5pm",
+      "Sun closed"
+    ],
+    "kslProfileUrl": "",
+    "facebookUrl": ""
+  },
+  "site": {
+    "url": "",
+    "title": "",
+    "showSold": true,
+    "soldDays": 60,
+    "featuredCount": 8,
+    "showPhone": true
+  },
+  "sources": {
+    "ksl": {
+      "enabled": true,
+      "memberId": "",
+      "requestDelayMs": 1500,
+      "detailRefreshHours": 24,
+      "maxPages": 25
+    },
+    "manual": {
+      "enabled": true
+    }
+  },
+  "sync": {
+    "cron": "17 */2 * * *",
+    "notify": "changes"
+  },
+  "contact": {
+    "phone": "+18015550100",
+    "email": "",
+    "telegramChatId": "",
+    "methods": [
+      "telegram"
+    ],
+    "turnstileSiteKey": "",
+    "fromEmail": "leads@notifications.example.com"
+  },
+  "worker": {
+    "name": "drift",
+    "url": "",
+    "d1DatabaseId": ""
+  },
+  "analytics": {
+    "enabled": true,
+    "ipMode": "hash"
+  },
+  "digest": {
+    "enabled": true,
+    "cron": "0 14 * * *",
+    "timezone": "America/Denver"
+  }
+}

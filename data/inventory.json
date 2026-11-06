@@ -1,0 +1,918 @@
+{
+  "version": 1,
+  "syncedAt": "2026-11-06T19:31:11.452Z",
+  "listings": [
+    {
+      "id": "90000102",
+      "source": "ksl",
+      "url": "https://cars.ksl.com/listing/90000102",
+      "title": "2022 Tesla Model 3 Long Range",
+      "year": 2022,
+      "make": "Tesla",
+      "model": "Model 3",
+      "trim": "Long Range",
+      "price": 31900,
+      "msrp": 45000,
+      "mileage": 74838,
+      "vin": "1FAKEVIN90000102X",
+      "stockNumber": "DM1002",
+      "condition": "Used",
+      "body": "Sedan",
+      "transmission": "Automatic",
+      "fuel": "Electric",
+      "drive": "AWD",
+      "cylinders": "",
+      "liters": "",
+      "doors": 4,
+      "seats": 5,
+      "exteriorColor": "White",
+      "interiorColor": "Black",
+      "titleType": "Clean Title",
+      "description": "Great commuter with excellent fuel economy. Clean title, well maintained, cold A/C. All records available. Come test drive it today!",
+      "options": [
+        "Backup Camera",
+        "Bluetooth",
+        "Heated Seats"
+      ],
+      "photos": [
+        "https://picsum.photos/seed/drift90000102-0/1200/900",
+        "https://picsum.photos/seed/drift90000102-1/1200/900",
+        "https://picsum.photos/seed/drift90000102-2/1200/900",
+        "https://picsum.photos/seed/drift90000102-3/1200/900",
+        "https://picsum.photos/seed/drift90000102-4/1200/900"
+      ],
+      "carfaxUrl": "https://www.carfax.com/",
+      "location": {
+        "city": "Salt Lake City",
+        "state": "UT",
+        "zip": "84115"
+      },
+      "status": "active",
+      "firstSeenAt": "2026-11-06T19:31:11.447Z",
+      "lastSeenAt": "2026-11-06T19:31:11.451Z",
+      "soldAt": null,
+      "sourceCreatedAt": "2026-10-30T19:18:41.000Z",
+      "sourceUpdatedAt": "2026-10-30T19:18:41.000Z",
+      "sourceExpiresAt": "2027-01-28T19:18:41.000Z",
+      "sourceStats": {
+        "pageViews": 111,
+        "favorites": 13
+      },
+      "priceHistory": [
+        {
+          "at": "2026-11-06T19:31:11.451Z",
+          "price": 31900
+        }
+      ],
+      "detailFetchedAt": "2026-11-06T19:31:11.447Z",
+      "hash": "782123f8b97d648e"
+    },
+    {
+      "id": "90000104",
+      "source": "ksl",
+      "url": "https://cars.ksl.com/listing/90000104",
+      "title": "2020 Honda CR-V EX-L",
+      "year": 2020,
+      "make": "Honda",
+      "model": "CR-V",
+      "trim": "EX-L",
+      "price": 25800,
+      "msrp": 27500,
+      "mileage": 24499,
+      "vin": "1FAKEVIN90000104X",
+      "stockNumber": "DM1004",
+      "condition": "Certified",
+      "body": "SUV",
+      "transmission": "CVT",
+      "fuel": "Gasoline",
+      "drive": "AWD",
+      "cylinders": "4",
+      "liters": "1.5L",
+      "doors": 4,
+      "seats": 5,
+      "exteriorColor": "Silver",
+      "interiorColor": "Black",
+      "titleType": "Clean Title",
+      "description": "Clean Carfax, non-smoker, garage kept. Heated seats, backup camera, Apple CarPlay & Android Auto. Fully inspected and detailed. Extended warranty options available.",
+      "options": [
+        "Backup Camera",
+        "Bluetooth",
+        "Heated Seats"
+      ],
+      "photos": [
+        "https://picsum.photos/seed/drift90000104-0/1200/900",
+        "https://picsum.photos/seed/drift90000104-1/1200/900",
+        "https://picsum.photos/seed/drift90000104-2/1200/900",
+        "https://picsum.photos/seed/drift90000104-3/1200/900",
+        "https://picsum.photos/seed/drift90000104-4/1200/900"
+      ],
+      "carfaxUrl": "https://www.carfax.com/",
+      "location": {
+        "city": "Salt Lake City",
+        "state": "UT",
+        "zip": "84115"
+      },
+      "status": "active",
+      "firstSeenAt": "2026-11-06T19:31:11.448Z",
+      "lastSeenAt": "2026-11-06T19:31:11.451Z",
+      "soldAt": null,
+      "sourceCreatedAt": "2026-10-27T19:18:41.000Z",
+      "sourceUpdatedAt": "2026-10-30T19:18:41.000Z",
+      "sourceExpiresAt": "2027-01-25T19:18:41.000Z",
+      "sourceStats": {
+        "pageViews": 87,
+        "favorites": 7
+      },
+      "priceHistory": [
+        {
+          "at": "2026-11-06T19:31:11.451Z",
+          "price": 25800
+        }
+      ],
+      "detailFetchedAt": "2026-11-06T19:31:11.448Z",
+      "hash": "be369f501582631f"
+    },
+    {
+      "id": "90000103",
+      "source": "ksl",
+      "url": "https://cars.ksl.com/listing/90000103",
+      "title": "2018 Ford F-150 XLT SuperCrew",
+      "year": 2018,
+      "make": "Ford",
+      "model": "F-150",
+      "trim": "XLT SuperCrew",
+      "price": 27995,
+      "msrp": 34000,
+      "mileage": 25747,
+      "vin": "1FAKEVIN90000103X",
+      "stockNumber": "DM1003",
+      "condition": "Used",
+      "body": "Truck",
+      "transmission": "Automatic",
+      "fuel": "Gasoline",
+      "drive": "4-Wheel Drive",
+      "cylinders": "6",
+      "liters": "2.7L",
+      "doors": 4,
+      "seats": 6,
+      "exteriorColor": "Black",
+      "interiorColor": "Gray",
+      "titleType": "Clean Title",
+      "description": "One-owner, clean title, no accidents. Serviced on schedule at the dealer. Tow package, bed liner, new tires. Financing available for all credit types — bring your trade!",
+      "options": [
+        "Backup Camera",
+        "Bluetooth",
+        "Heated Seats"
+      ],
+      "photos": [
+        "https://picsum.photos/seed/drift90000103-0/1200/900",
+        "https://picsum.photos/seed/drift90000103-1/1200/900",
+        "https://picsum.photos/seed/drift90000103-2/1200/900",
+        "https://picsum.photos/seed/drift90000103-3/1200/900",
+        "https://picsum.photos/seed/drift90000103-4/1200/900"
+      ],
+      "carfaxUrl": "https://www.carfax.com/",
+      "location": {
+        "city": "Salt Lake City",
+        "state": "UT",
+        "zip": "84115"
+      },
+      "status": "active",
+      "firstSeenAt": "2026-11-06T19:31:11.447Z",
+      "lastSeenAt": "2026-11-06T19:31:11.451Z",
+      "soldAt": null,
+      "sourceCreatedAt": "2026-10-23T19:18:41.000Z",
+      "sourceUpdatedAt": "2026-10-26T19:18:41.000Z",
+      "sourceExpiresAt": "2027-01-21T19:18:41.000Z",
+      "sourceStats": {
+        "pageViews": 166,
+        "favorites": 18
+      },
+      "priceHistory": [
+        {
+          "at": "2026-11-06T19:31:11.451Z",
+          "price": 27995
+        }
+      ],
+      "detailFetchedAt": "2026-11-06T19:31:11.447Z",
+      "hash": "2f7b57ab1bce96d9"
+    },
+    {
+      "id": "90000101",
+      "source": "ksl",
+      "url": "https://cars.ksl.com/listing/90000101",
+      "title": "2019 Subaru Outback Premium",
+      "year": 2019,
+      "make": "Subaru",
+      "model": "Outback",
+      "trim": "Premium",
+      "price": 21450,
+      "msrp": 24800,
+      "mileage": 94387,
+      "vin": "1FAKEVIN90000101X",
+      "stockNumber": "DM1001",
+      "condition": "Used",
+      "body": "Wagon",
+      "transmission": "CVT",
+      "fuel": "Gasoline",
+      "drive": "AWD",
+      "cylinders": "4",
+      "liters": "2.5L",
+      "doors": 4,
+      "seats": 5,
+      "exteriorColor": "Blue",
+      "interiorColor": "Gray",
+      "titleType": "Clean Title",
+      "description": "Utah-ready all-wheel drive. Recent oil change, new brakes, fresh inspection. Roof rack included. Priced to sell.",
+      "options": [
+        "Backup Camera",
+        "Bluetooth",
+        "Heated Seats"
+      ],
+      "photos": [
+        "https://picsum.photos/seed/drift90000101-0/1200/900",
+        "https://picsum.photos/seed/drift90000101-1/1200/900",
+        "https://picsum.photos/seed/drift90000101-2/1200/900",
+        "https://picsum.photos/seed/drift90000101-3/1200/900",
+        "https://picsum.photos/seed/drift90000101-4/1200/900"
+      ],
+      "carfaxUrl": "https://www.carfax.com/",
+      "location": {
+        "city": "Salt Lake City",
+        "state": "UT",
+        "zip": "84115"
+      },
+      "status": "active",
+      "firstSeenAt": "2026-11-06T19:31:11.447Z",
+      "lastSeenAt": "2026-11-06T19:31:11.451Z",
+      "soldAt": null,
+      "sourceCreatedAt": "2026-10-22T19:18:41.000Z",
+      "sourceUpdatedAt": "2026-10-24T19:18:41.000Z",
+      "sourceExpiresAt": "2027-01-20T19:18:41.000Z",
+      "sourceStats": {
+        "pageViews": 559,
+        "favorites": 1
+      },
+      "priceHistory": [
+        {
+          "at": "2026-11-06T19:31:11.451Z",
+          "price": 21450
+        }
+      ],
+      "detailFetchedAt": "2026-11-06T19:31:11.447Z",
+      "hash": "adcde7ebd2a0255f"
+    },
+    {
+      "id": "90000106",
+      "source": "ksl",
+      "url": "https://cars.ksl.com/listing/90000106",
+      "title": "2023 Hyundai Elantra SEL",
+      "year": 2023,
+      "make": "Hyundai",
+      "model": "Elantra",
+      "trim": "SEL",
+      "price": 19450,
+      "msrp": 20900,
+      "mileage": 94231,
+      "vin": "1FAKEVIN90000106X",
+      "stockNumber": "DM1006",
+      "condition": "Used",
+      "body": "Sedan",
+      "transmission": "CVT",
+      "fuel": "Gasoline",
+      "drive": "FWD",
+      "cylinders": "4",
+      "liters": "2.0L",
+      "doors": 4,
+      "seats": 5,
+      "exteriorColor": "Gray",
+      "interiorColor": "Black",
+      "titleType": "Clean Title",
+      "description": "Great commuter with excellent fuel economy. Clean title, well maintained, cold A/C. All records available. Come test drive it today!",
+      "options": [
+        "Backup Camera",
+        "Bluetooth",
+        "Heated Seats"
+      ],
+      "photos": [
+        "https://picsum.photos/seed/drift90000106-0/1200/900",
+        "https://picsum.photos/seed/drift90000106-1/1200/900",
+        "https://picsum.photos/seed/drift90000106-2/1200/900",
+        "https://picsum.photos/seed/drift90000106-3/1200/900",
+        "https://picsum.photos/seed/drift90000106-4/1200/900"
+      ],
+      "carfaxUrl": "https://www.carfax.com/",
+      "location": {
+        "city": "Salt Lake City",
+        "state": "UT",
+        "zip": "84115"
+      },
+      "status": "active",
+      "firstSeenAt": "2026-11-06T19:31:11.448Z",
+      "lastSeenAt": "2026-11-06T19:31:11.451Z",
+      "soldAt": null,
+      "sourceCreatedAt": "2026-10-11T19:18:41.000Z",
+      "sourceUpdatedAt": "2026-10-11T19:18:41.000Z",
+      "sourceExpiresAt": "2027-01-09T19:18:41.000Z",
+      "sourceStats": {
+        "pageViews": 694,
+        "favorites": 18
+      },
+      "priceHistory": [
+        {
+          "at": "2026-11-06T19:31:11.451Z",
+          "price": 19450
+        }
+      ],
+      "detailFetchedAt": "2026-11-06T19:31:11.448Z",
+      "hash": "eb0f328642538137"
+    },
+    {
+      "id": "90000108",
+      "source": "ksl",
+      "url": "https://cars.ksl.com/listing/90000108",
+      "title": "2021 Mazda CX-5 Touring",
+      "year": 2021,
+      "make": "Mazda",
+      "model": "CX-5",
+      "trim": "Touring",
+      "price": 23995,
+      "msrp": 26200,
+      "mileage": 107181,
+      "vin": "1FAKEVIN90000108X",
+      "stockNumber": "DM1008",
+      "condition": "Used",
+      "body": "SUV",
+      "transmission": "Automatic",
+      "fuel": "Gasoline",
+      "drive": "AWD",
+      "cylinders": "4",
+      "liters": "2.5L",
+      "doors": 4,
+      "seats": 5,
+      "exteriorColor": "Red",
+      "interiorColor": "Black",
+      "titleType": "Clean Title",
+      "description": "Clean Carfax, non-smoker, garage kept. Heated seats, backup camera, Apple CarPlay & Android Auto. Fully inspected and detailed. Extended warranty options available.",
+      "options": [
+        "Backup Camera",
+        "Bluetooth",
+        "Heated Seats",
+        "Alloy Wheels"
+      ],
+      "photos": [
+        "https://picsum.photos/seed/drift90000108-0/1200/900",
+        "https://picsum.photos/seed/drift90000108-1/1200/900",
+        "https://picsum.photos/seed/drift90000108-2/1200/900",
+        "https://picsum.photos/seed/drift90000108-3/1200/900",
+        "https://picsum.photos/seed/drift90000108-4/1200/900"
+      ],
+      "carfaxUrl": "https://www.carfax.com/",
+      "location": {
+        "city": "Salt Lake City",
+        "state": "UT",
+        "zip": "84115"
+      },
+      "status": "active",
+      "firstSeenAt": "2026-11-06T19:31:11.450Z",
+      "lastSeenAt": "2026-11-06T19:31:11.451Z",
+      "soldAt": null,
+      "sourceCreatedAt": "2026-10-08T19:18:41.000Z",
+      "sourceUpdatedAt": "2026-10-11T19:18:41.000Z",
+      "sourceExpiresAt": "2027-01-06T19:18:41.000Z",
+      "sourceStats": {
+        "pageViews": 477,
+        "favorites": 17
+      },
+      "priceHistory": [
+        {
+          "at": "2026-11-06T19:31:11.451Z",
+          "price": 23995
+        }
+      ],
+      "detailFetchedAt": "2026-11-06T19:31:11.450Z",
+      "hash": "d88efc06ad77dc51"
+    },
+    {
+      "id": "90000110",
+      "source": "ksl",
+      "url": "https://cars.ksl.com/listing/90000110",
+      "title": "2019 Ram 1500 Big Horn",
+      "year": 2019,
+      "make": "Ram",
+      "model": "1500",
+      "trim": "Big Horn",
+      "price": 29800,
+      "msrp": 33500,
+      "mileage": 93290,
+      "vin": "1FAKEVIN90000110X",
+      "stockNumber": "DM1010",
+      "condition": "Used",
+      "body": "Truck",
+      "transmission": "Automatic",
+      "fuel": "Gasoline",
+      "drive": "4-Wheel Drive",
+      "cylinders": "8",
+      "liters": "5.7L",
+      "doors": 4,
+      "seats": 6,
+      "exteriorColor": "Blue",
+      "interiorColor": "Black",
+      "titleType": "Clean Title",
+      "description": "One-owner, clean title, no accidents. Serviced on schedule at the dealer. Tow package, bed liner, new tires. Financing available for all credit types — bring your trade!",
+      "options": [
+        "Backup Camera",
+        "Bluetooth",
+        "Heated Seats",
+        "Alloy Wheels",
+        "Keyless Entry"
+      ],
+      "photos": [
+        "https://picsum.photos/seed/drift90000110-0/1200/900",
+        "https://picsum.photos/seed/drift90000110-1/1200/900",
+        "https://picsum.photos/seed/drift90000110-2/1200/900",
+        "https://picsum.photos/seed/drift90000110-3/1200/900",
+        "https://picsum.photos/seed/drift90000110-4/1200/900"
+      ],
+      "carfaxUrl": "https://www.carfax.com/",
+      "location": {
+        "city": "Salt Lake City",
+        "state": "UT",
+        "zip": "84115"
+      },
+      "status": "active",
+      "firstSeenAt": "2026-11-06T19:31:11.451Z",
+      "lastSeenAt": "2026-11-06T19:31:11.451Z",
+      "soldAt": null,
+      "sourceCreatedAt": "2026-10-03T19:18:41.000Z",
+      "sourceUpdatedAt": "2026-10-03T19:18:41.000Z",
+      "sourceExpiresAt": "2027-01-01T19:18:41.000Z",
+      "sourceStats": {
+        "pageViews": 577,
+        "favorites": 9
+      },
+      "priceHistory": [
+        {
+          "at": "2026-11-06T19:31:11.451Z",
+          "price": 29800
+        }
+      ],
+      "detailFetchedAt": "2026-11-06T19:31:11.451Z",
+      "hash": "083125a8fdd7736b"
+    },
+    {
+      "id": "90000105",
+      "source": "ksl",
+      "url": "https://cars.ksl.com/listing/90000105",
+      "title": "2017 Jeep Wrangler Unlimited Sahara",
+      "year": 2017,
+      "make": "Jeep",
+      "model": "Wrangler",
+      "trim": "Unlimited Sahara",
+      "price": 26500,
+      "msrp": 29999,
+      "mileage": 36907,
+      "vin": "1FAKEVIN90000105X",
+      "stockNumber": "DM1005",
+      "condition": "Used",
+      "body": "SUV",
+      "transmission": "Automatic",
+      "fuel": "Gasoline",
+      "drive": "4-Wheel Drive",
+      "cylinders": "6",
+      "liters": "3.6L",
+      "doors": 4,
+      "seats": 5,
+      "exteriorColor": "Red",
+      "interiorColor": "Black",
+      "titleType": "Clean Title",
+      "description": "Clean Carfax, non-smoker, garage kept. Heated seats, backup camera, Apple CarPlay & Android Auto. Fully inspected and detailed. Extended warranty options available.",
+      "options": [
+        "Backup Camera",
+        "Bluetooth",
+        "Heated Seats",
+        "Alloy Wheels"
+      ],
+      "photos": [
+        "https://picsum.photos/seed/drift90000105-0/1200/900",
+        "https://picsum.photos/seed/drift90000105-1/1200/900",
+        "https://picsum.photos/seed/drift90000105-2/1200/900",
+        "https://picsum.photos/seed/drift90000105-3/1200/900",
+        "https://picsum.photos/seed/drift90000105-4/1200/900"
+      ],
+      "carfaxUrl": "https://www.carfax.com/",
+      "location": {
+        "city": "Salt Lake City",
+        "state": "UT",
+        "zip": "84115"
+      },
+      "status": "active",
+      "firstSeenAt": "2026-11-06T19:31:11.448Z",
+      "lastSeenAt": "2026-11-06T19:31:11.451Z",
+      "soldAt": null,
+      "sourceCreatedAt": "2026-09-27T19:18:41.000Z",
+      "sourceUpdatedAt": "2026-09-30T19:18:41.000Z",
+      "sourceExpiresAt": "2026-12-26T19:18:41.000Z",
+      "sourceStats": {
+        "pageViews": 160,
+        "favorites": 17
+      },
+      "priceHistory": [
+        {
+          "at": "2026-11-06T19:31:11.451Z",
+          "price": 26500
+        }
+      ],
+      "detailFetchedAt": "2026-11-06T19:31:11.448Z",
+      "hash": "4988a594dbfd36b5"
+    },
+    {
+      "id": "90000100",
+      "source": "ksl",
+      "url": "https://cars.ksl.com/listing/90000100",
+      "title": "2021 Toyota Tacoma TRD Off-Road",
+      "year": 2021,
+      "make": "Toyota",
+      "model": "Tacoma",
+      "trim": "TRD Off-Road",
+      "price": 38995,
+      "msrp": 41200,
+      "mileage": 69750,
+      "vin": "1FAKEVIN90000100X",
+      "stockNumber": "DM1000",
+      "condition": "Used",
+      "body": "Truck",
+      "transmission": "Automatic",
+      "fuel": "Gasoline",
+      "drive": "4-Wheel Drive",
+      "cylinders": "6",
+      "liters": "3.5L",
+      "doors": 4,
+      "seats": 5,
+      "exteriorColor": "Gray",
+      "interiorColor": "Black",
+      "titleType": "Clean Title",
+      "description": "One-owner, clean title, no accidents. Serviced on schedule at the dealer. Tow package, bed liner, new tires. Financing available for all credit types — bring your trade!",
+      "options": [
+        "Backup Camera",
+        "Bluetooth"
+      ],
+      "photos": [
+        "https://picsum.photos/seed/drift90000100-0/1200/900",
+        "https://picsum.photos/seed/drift90000100-1/1200/900",
+        "https://picsum.photos/seed/drift90000100-2/1200/900",
+        "https://picsum.photos/seed/drift90000100-3/1200/900",
+        "https://picsum.photos/seed/drift90000100-4/1200/900"
+      ],
+      "carfaxUrl": "https://www.carfax.com/",
+      "location": {
+        "city": "Salt Lake City",
+        "state": "UT",
+        "zip": "84115"
+      },
+      "status": "active",
+      "firstSeenAt": "2026-11-06T19:31:11.446Z",
+      "lastSeenAt": "2026-11-06T19:31:11.451Z",
+      "soldAt": null,
+      "sourceCreatedAt": "2026-09-23T19:18:41.000Z",
+      "sourceUpdatedAt": "2026-09-24T19:18:41.000Z",
+      "sourceExpiresAt": "2026-12-22T19:18:41.000Z",
+      "sourceStats": {
+        "pageViews": 89,
+        "favorites": 20
+      },
+      "priceHistory": [
+        {
+          "at": "2026-11-06T19:31:11.451Z",
+          "price": 38995
+        }
+      ],
+      "detailFetchedAt": "2026-11-06T19:31:11.446Z",
+      "hash": "35dbabe3b40fe01d"
+    },
+    {
+      "id": "90000111",
+      "source": "ksl",
+      "url": "https://cars.ksl.com/listing/90000111",
+      "title": "2020 Kia Telluride EX",
+      "year": 2020,
+      "make": "Kia",
+      "model": "Telluride",
+      "trim": "EX",
+      "price": 31500,
+      "msrp": 34900,
+      "mileage": 55740,
+      "vin": "1FAKEVIN90000111X",
+      "stockNumber": "DM1011",
+      "condition": "Used",
+      "body": "SUV",
+      "transmission": "Automatic",
+      "fuel": "Gasoline",
+      "drive": "AWD",
+      "cylinders": "6",
+      "liters": "3.8L",
+      "doors": 4,
+      "seats": 8,
+      "exteriorColor": "Green",
+      "interiorColor": "Gray",
+      "titleType": "Clean Title",
+      "description": "Clean Carfax, non-smoker, garage kept. Heated seats, backup camera, Apple CarPlay & Android Auto. Fully inspected and detailed. Extended warranty options available.",
+      "options": [
+        "Backup Camera",
+        "Bluetooth"
+      ],
+      "photos": [
+        "https://picsum.photos/seed/drift90000111-0/1200/900",
+        "https://picsum.photos/seed/drift90000111-1/1200/900",
+        "https://picsum.photos/seed/drift90000111-2/1200/900",
+        "https://picsum.photos/seed/drift90000111-3/1200/900",
+        "https://picsum.photos/seed/drift90000111-4/1200/900"
+      ],
+      "carfaxUrl": "https://www.carfax.com/",
+      "location": {
+        "city": "Salt Lake City",
+        "state": "UT",
+        "zip": "84115"
+      },
+      "status": "active",
+      "firstSeenAt": "2026-11-06T19:31:11.451Z",
+      "lastSeenAt": "2026-11-06T19:31:11.451Z",
+      "soldAt": null,
+      "sourceCreatedAt": "2026-09-21T19:18:41.000Z",
+      "sourceUpdatedAt": "2026-09-24T19:18:41.000Z",
+      "sourceExpiresAt": "2026-12-20T19:18:41.000Z",
+      "sourceStats": {
+        "pageViews": 114,
+        "favorites": 19
+      },
+      "priceHistory": [
+        {
+          "at": "2026-11-06T19:31:11.451Z",
+          "price": 31500
+        }
+      ],
+      "detailFetchedAt": "2026-11-06T19:31:11.451Z",
+      "hash": "6f142b004d2c07c3"
+    },
+    {
+      "id": "90000107",
+      "source": "ksl",
+      "url": "https://cars.ksl.com/listing/90000107",
+      "title": "2016 Chevrolet Silverado 1500 LTZ",
+      "year": 2016,
+      "make": "Chevrolet",
+      "model": "Silverado 1500",
+      "trim": "LTZ",
+      "price": 24900,
+      "msrp": null,
+      "mileage": 89793,
+      "vin": "1FAKEVIN90000107X",
+      "stockNumber": "DM1007",
+      "condition": "Used",
+      "body": "Truck",
+      "transmission": "Automatic",
+      "fuel": "Gasoline",
+      "drive": "4-Wheel Drive",
+      "cylinders": "8",
+      "liters": "5.3L",
+      "doors": 4,
+      "seats": 5,
+      "exteriorColor": "White",
+      "interiorColor": "Tan",
+      "titleType": "Clean Title",
+      "description": "One-owner, clean title, no accidents. Serviced on schedule at the dealer. Tow package, bed liner, new tires. Financing available for all credit types — bring your trade!",
+      "options": [
+        "Backup Camera",
+        "Bluetooth"
+      ],
+      "photos": [
+        "https://picsum.photos/seed/drift90000107-0/1200/900",
+        "https://picsum.photos/seed/drift90000107-1/1200/900",
+        "https://picsum.photos/seed/drift90000107-2/1200/900",
+        "https://picsum.photos/seed/drift90000107-3/1200/900",
+        "https://picsum.photos/seed/drift90000107-4/1200/900"
+      ],
+      "carfaxUrl": "https://www.carfax.com/",
+      "location": {
+        "city": "Salt Lake City",
+        "state": "UT",
+        "zip": "84115"
+      },
+      "status": "active",
+      "firstSeenAt": "2026-11-06T19:31:11.450Z",
+      "lastSeenAt": "2026-11-06T19:31:11.451Z",
+      "soldAt": null,
+      "sourceCreatedAt": "2026-09-17T19:18:41.000Z",
+      "sourceUpdatedAt": "2026-09-17T19:18:41.000Z",
+      "sourceExpiresAt": "2026-12-16T19:18:41.000Z",
+      "sourceStats": {
+        "pageViews": 104,
+        "favorites": 22
+      },
+      "priceHistory": [
+        {
+          "at": "2026-11-06T19:31:11.451Z",
+          "price": 24900
+        }
+      ],
+      "detailFetchedAt": "2026-11-06T19:31:11.450Z",
+      "hash": "4ddc25999f5047cd"
+    },
+    {
+      "id": "90000109",
+      "source": "ksl",
+      "url": "https://cars.ksl.com/listing/90000109",
+      "title": "2015 Toyota Camry SE",
+      "year": 2015,
+      "make": "Toyota",
+      "model": "Camry",
+      "trim": "SE",
+      "price": 12995,
+      "msrp": 14500,
+      "mileage": 65393,
+      "vin": "1FAKEVIN90000109X",
+      "stockNumber": "DM1009",
+      "condition": "Used",
+      "body": "Sedan",
+      "transmission": "Automatic",
+      "fuel": "Gasoline",
+      "drive": "FWD",
+      "cylinders": "4",
+      "liters": "2.5L",
+      "doors": 4,
+      "seats": 5,
+      "exteriorColor": "Black",
+      "interiorColor": "Black",
+      "titleType": "Clean Title",
+      "description": "Great commuter with excellent fuel economy. Clean title, well maintained, cold A/C. All records available. Come test drive it today!",
+      "options": [
+        "Backup Camera",
+        "Bluetooth",
+        "Heated Seats"
+      ],
+      "photos": [
+        "https://picsum.photos/seed/drift90000109-0/1200/900",
+        "https://picsum.photos/seed/drift90000109-1/1200/900",
+        "https://picsum.photos/seed/drift90000109-2/1200/900",
+        "https://picsum.photos/seed/drift90000109-3/1200/900",
+        "https://picsum.photos/seed/drift90000109-4/1200/900"
+      ],
+      "carfaxUrl": "https://www.carfax.com/",
+      "location": {
+        "city": "Salt Lake City",
+        "state": "UT",
+        "zip": "84115"
+      },
+      "status": "active",
+      "firstSeenAt": "2026-11-06T19:31:11.450Z",
+      "lastSeenAt": "2026-11-06T19:31:11.451Z",
+      "soldAt": null,
+      "sourceCreatedAt": "2026-09-05T19:18:41.000Z",
+      "sourceUpdatedAt": "2026-09-08T19:18:41.000Z",
+      "sourceExpiresAt": "2026-12-04T19:18:41.000Z",
+      "sourceStats": {
+        "pageViews": 294,
+        "favorites": 9
+      },
+      "priceHistory": [
+        {
+          "at": "2026-11-06T19:31:11.451Z",
+          "price": 12995
+        }
+      ],
+      "detailFetchedAt": "2026-11-06T19:31:11.450Z",
+      "hash": "39ac558a901bff56"
+    },
+    {
+      "id": "90000113",
+      "source": "ksl",
+      "url": "https://cars.ksl.com/listing/90000113",
+      "title": "2022 Ford Bronco Sport Big Bend",
+      "year": 2022,
+      "make": "Ford",
+      "model": "Bronco Sport",
+      "trim": "Big Bend",
+      "price": 28750,
+      "msrp": 30500,
+      "mileage": 23138,
+      "vin": "1FAKEVIN90000113X",
+      "stockNumber": "DM1013",
+      "condition": "Used",
+      "body": "SUV",
+      "transmission": "Automatic",
+      "fuel": "Gasoline",
+      "drive": "4-Wheel Drive",
+      "cylinders": "3",
+      "liters": "1.5L",
+      "doors": 4,
+      "seats": 5,
+      "exteriorColor": "Orange",
+      "interiorColor": "Black",
+      "titleType": "Clean Title",
+      "description": "Clean Carfax, non-smoker, garage kept. Heated seats, backup camera, Apple CarPlay & Android Auto. Fully inspected and detailed. Extended warranty options available.",
+      "options": [
+        "Backup Camera",
+        "Bluetooth",
+        "Heated Seats",
+        "Alloy Wheels"
+      ],
+      "photos": [
+        "https://picsum.photos/seed/drift90000113-0/1200/900",
+        "https://picsum.photos/seed/drift90000113-1/1200/900",
+        "https://picsum.photos/seed/drift90000113-2/1200/900",
+        "https://picsum.photos/seed/drift90000113-3/1200/900",
+        "https://picsum.photos/seed/drift90000113-4/1200/900"
+      ],
+      "carfaxUrl": "https://www.carfax.com/",
+      "location": {
+        "city": "Salt Lake City",
+        "state": "UT",
+        "zip": "84115"
+      },
+      "status": "active",
+      "firstSeenAt": "2026-11-06T19:31:11.451Z",
+      "lastSeenAt": "2026-11-06T19:31:11.451Z",
+      "soldAt": null,
+      "sourceCreatedAt": "2026-09-02T19:18:41.000Z",
+      "sourceUpdatedAt": "2026-09-05T19:18:41.000Z",
+      "sourceExpiresAt": "2026-12-01T19:18:41.000Z",
+      "sourceStats": {
+        "pageViews": 119,
+        "favorites": 21
+      },
+      "priceHistory": [
+        {
+          "at": "2026-11-06T19:31:11.451Z",
+          "price": 28750
+        }
+      ],
+      "detailFetchedAt": "2026-11-06T19:31:11.451Z",
+      "hash": "e599a859659ddb13"
+    },
+    {
+      "id": "90000112",
+      "source": "ksl",
+      "url": "https://cars.ksl.com/listing/90000112",
+      "title": "2014 Honda Civic LX",
+      "year": 2014,
+      "make": "Honda",
+      "model": "Civic",
+      "trim": "LX",
+      "price": 9800,
+      "msrp": null,
+      "mileage": 39621,
+      "vin": "1FAKEVIN90000112X",
+      "stockNumber": "DM1012",
+      "condition": "Used",
+      "body": "Sedan",
+      "transmission": "Automatic",
+      "fuel": "Gasoline",
+      "drive": "FWD",
+      "cylinders": "4",
+      "liters": "1.8L",
+      "doors": 4,
+      "seats": 5,
+      "exteriorColor": "Silver",
+      "interiorColor": "Gray",
+      "titleType": "Clean Title",
+      "description": "Great commuter with excellent fuel economy. Clean title, well maintained, cold A/C. All records available. Come test drive it today!",
+      "options": [
+        "Backup Camera",
+        "Bluetooth",
+        "Heated Seats"
+      ],
+      "photos": [
+        "https://picsum.photos/seed/drift90000112-0/1200/900",
+        "https://picsum.photos/seed/drift90000112-1/1200/900",
+        "https://picsum.photos/seed/drift90000112-2/1200/900",
+        "https://picsum.photos/seed/drift90000112-3/1200/900",
+        "https://picsum.photos/seed/drift90000112-4/1200/900"
+      ],
+      "carfaxUrl": "https://www.carfax.com/",
+      "location": {
+        "city": "Salt Lake City",
+        "state": "UT",
+        "zip": "84115"
+      },
+      "status": "active",
+      "firstSeenAt": "2026-11-06T19:31:11.451Z",
+      "lastSeenAt": "2026-11-06T19:31:11.451Z",
+      "soldAt": null,
+      "sourceCreatedAt": "2026-08-30T19:18:41.000Z",
+      "sourceUpdatedAt": "2026-09-02T19:18:41.000Z",
+      "sourceExpiresAt": "2026-11-28T19:18:41.000Z",
+      "sourceStats": {
+        "pageViews": 390,
+        "favorites": 24
+      },
+      "priceHistory": [
+        {
+          "at": "2026-11-06T19:31:11.451Z",
+          "price": 9800
+        }
+      ],
+      "detailFetchedAt": "2026-11-06T19:31:11.451Z",
+      "hash": "4ee1784df0386966"
+    }
+  ]
+}

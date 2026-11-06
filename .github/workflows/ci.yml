@@ -1,0 +1,24 @@
+# Pull-request checks: types, tests, and a full mock sync + build.
+name: ci
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - name: Mock sync + build
+        run: |
+          node ./bin/drift sync --mock --no-notify --dry-run
+          node ./bin/drift build
+          test -f dist/index.html && test -f dist/api/listings.json
