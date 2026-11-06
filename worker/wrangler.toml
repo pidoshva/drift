@@ -1,6 +1,6 @@
 # Template. `drift deploy worker` and `drift worker dev` render worker/wrangler.generated.toml
-# from this file + drift.config.json (vars, D1 id). Do not put secrets here:
-#   wrangler secret put TELEGRAM_BOT_TOKEN | RESEND_API_KEY | TURNSTILE_SECRET_KEY | ADMIN_TOKEN | DASHBOARD_TOKEN
+# from this file + drift.config.json (vars, D1 id). Do not put secrets here: they come from .env via
+# `drift worker secrets` (see .env.example for the names).
 name = "drift"
 main = "src/index.ts"
 compatibility_date = "2026-10-01"

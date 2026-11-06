@@ -38,6 +38,7 @@ data/manual/*.json ──▶ src/sources/manual ─┘                 │ (comm
 | Logging | `src/core/logger.ts` | Pretty on TTY, JSON in CI, always appended to `.drift/drift.log`. |
 | Sources | `src/sources/` | `InventorySource` interface; `ksl/` (rsc parser, client, mapper, mock), `manual.ts`. |
 | Jobs | `src/jobs/` | `sync.ts`, `digest.ts`, `events.ts` (job → worker). |
+| Notify | `src/notify/telegram.ts` | Telegram client for CLI/jobs (sync report, digest, chat-id lookup). The worker has its own copy in `worker/src/telegram.ts`. |
 | Site | `src/site/` | `build.ts`, `context.ts`, `templates/` (html tagged-template, no framework), `theme/`, `client/`. |
 | Worker | `worker/src/` | `index.ts` router; `contact.ts`, `analytics.ts`, `admin.ts`; `schema.sql` (D1). |
 | CLI | `src/cli/` | `main.ts` + one file per command group in `commands/`. Thin: parse → call → print. |
@@ -55,12 +56,14 @@ data/manual/*.json ──▶ src/sources/manual ─┘                 │ (comm
 - **New analytics event**: add to `EVENT_TYPES` (worker/src/analytics.ts), emit with `track()` in
   `src/site/client/site.js`, surface in `worker/src/admin.ts` → `dash.js` / `stats.ts`.
 - **New page**: `src/site/templates/pages/<name>.ts` returning `{path, html}`, add to `pages` in `build.ts`.
+- **Owner guide**: edit `docs/owner-guide.html`, then regenerate the committed PDF with headless Chrome
+  (`--headless --no-pdf-header-footer --print-to-pdf=docs/owner-guide.pdf docs/owner-guide.html`). Never edit the PDF.
 - **Worker secrets**: `.env` → `drift worker secrets`. New secret = add to `Env` (worker/src/types.ts),
   `.env.example`, `env.ts` SECRET_NAMES, `worker.ts` secrets map, `doctor.ts`.
 
 ## Commands (`./bin/drift`, or `pnpm drift`)
 
-`sync [--mock|--dry-run|--limit|--force|--source|--remote]`, `build`, `serve`, `deploy site|worker`,
+`sync [--mock|--dry-run|--limit|--force|--source|--no-notify|--json|--remote]`, `build`, `serve`, `deploy site|worker`,
 `listings list|show|mark`, `logs [--remote --type lead|pageview…] [--actions]`, `stats [--days]`,
 `leads`, `config show|get|set|validate`, `schedule show|set sync|digest --every 2h`,
 `contact show|set phone|email|telegram|methods | telegram-chat-id | test`,
