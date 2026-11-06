@@ -29,6 +29,26 @@ export function writeInventoryFile(path: string, file: InventoryFile): void {
 export const loadInventory = (): InventoryFile => readInventoryFile(PATHS.inventory);
 export const loadArchive = (): InventoryFile => readInventoryFile(PATHS.archive);
 
+/**
+ * Forces a listing's status by hand and moves it between inventory and archive.
+ * A non-active mark is locked: sync keeps the car archived even while the source still lists it,
+ * until `markListing(id, 'active')` clears the lock.
+ */
+export function markListing(id: string, status: ListingStatus, now: string = new Date().toISOString()): Listing {
+  const inv = loadInventory();
+  const arc = loadArchive();
+  const all = [...inv.listings, ...arc.listings];
+  const l = all.find((x) => x.id === id);
+  if (!l) throw new Error(`listing ${id} not found`);
+  const updated: Listing = status === 'active'
+    ? { ...l, status, soldAt: null, statusLockedAt: null }
+    : { ...l, status, soldAt: l.soldAt ?? now, statusLockedAt: now };
+  const rest = all.filter((x) => x.id !== id);
+  writeInventoryFile(PATHS.inventory, { ...inv, listings: [...rest.filter((x) => x.status === 'active'), ...(status === 'active' ? [updated] : [])] });
+  writeInventoryFile(PATHS.archive, { ...arc, listings: [...rest.filter((x) => x.status !== 'active'), ...(status !== 'active' ? [updated] : [])] });
+  return updated;
+}
+
 export function byNewest(a: Listing, b: Listing): number {
   return (b.sourceCreatedAt ?? b.firstSeenAt).localeCompare(a.sourceCreatedAt ?? a.firstSeenAt);
 }

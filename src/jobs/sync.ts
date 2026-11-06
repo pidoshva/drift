@@ -6,7 +6,7 @@ import { Listing, ListingStatus, daysBetween, formatPrice, listingPath } from '.
 import { SyncChanges, applyChanges, loadArchive, loadInventory, mergeSnapshot, summarizeChanges, writeInventoryFile } from '../core/inventory.js';
 import { errorData, log } from '../core/logger.js';
 import { PATHS } from '../core/paths.js';
-import { InventorySource, ListingSummary } from '../sources/source.js';
+import { GoneResolution, InventorySource, ListingSummary } from '../sources/source.js';
 import { esc, sendTelegram } from '../notify/telegram.js';
 import { postJobEvent } from './events.js';
 
@@ -34,6 +34,8 @@ export interface SyncReport {
   added: Listing[];
   gone: { listing: Listing; status: ListingStatus }[];
   priceDrops: { listing: Listing; from: number | null; to: number | null }[];
+  /** Missing from the source but the gone check was inconclusive; kept live, re-checked next run. */
+  unverified: { listing: Listing; reason: string }[];
   /** A source failed entirely (its previous inventory was kept). Makes `ok` false and the CLI exit non-zero. */
   errors: string[];
   /** Per-listing problems (detail fetch or gone check failed); data was still written. */
@@ -48,10 +50,11 @@ export async function runSync(config: Config, opts: SyncOptions): Promise<SyncRe
   const archive = loadArchive();
   const report: SyncReport = {
     startedAt, finishedAt: startedAt, durationMs: 0, ok: true, dryRun: Boolean(opts.dryRun), perSource: {},
-    totals: { active: 0, added: 0, updated: 0, gone: 0, detailFetches: 0, errors: 0, warnings: 0 }, added: [], gone: [], priceDrops: [], errors: [], warnings: [],
+    totals: { active: 0, added: 0, updated: 0, gone: 0, detailFetches: 0, errors: 0, warnings: 0 }, added: [], gone: [], priceDrops: [], unverified: [], errors: [], warnings: [],
   };
   const nextActive: Listing[] = [];
   const nextArchive: Listing[] = [...archive.listings];
+  const locked = new Set(archive.listings.filter((l) => l.statusLockedAt).map((l) => l.id));
   const refreshMs = config.sources.ksl.detailRefreshHours * 3_600_000;
 
   for (const source of opts.sources) {
@@ -60,7 +63,11 @@ export async function runSync(config: Config, opts: SyncOptions): Promise<SyncRe
     const currentById = new Map(current.map((l) => [l.id, l]));
     let summaries: ListingSummary[];
     try {
-      summaries = await source.listSummaries();
+      summaries = (await source.listSummaries()).filter((s) => {
+        if (!locked.has(s.id)) return true;
+        slog.info('skipping listing marked by hand; still archived', { id: s.id });
+        return false;
+      });
     } catch (err) {
       slog.error('listing failed; keeping previous inventory for this source', errorData(err));
       report.errors.push(`${source.name}: ${(err as Error).message}`);
@@ -94,11 +101,14 @@ export async function runSync(config: Config, opts: SyncOptions): Promise<SyncRe
     const goneStatus = new Map<string, ListingStatus>();
     for (const l of current) {
       if (summaries.some((s) => s.id === l.id)) continue;
-      try { goneStatus.set(l.id, await source.resolveGone(l)); }
-      catch (err) {
-        slog.warn('resolveGone failed; keeping listing until the next run', { id: l.id, ...errorData(err) });
-        report.warnings.push(`${source.name}:${l.id}: gone check failed: ${(err as Error).message}`);
-        goneStatus.set(l.id, 'active');
+      let resolution: GoneResolution;
+      try { resolution = await source.resolveGone(l); }
+      catch (err) { resolution = { status: 'active', unresolved: (err as Error).message }; }
+      goneStatus.set(l.id, resolution.status);
+      if (resolution.unresolved) {
+        slog.warn('could not verify missing listing; kept live until the next run', { id: l.id, reason: resolution.unresolved });
+        report.unverified.push({ listing: l, reason: resolution.unresolved });
+        report.warnings.push(`${source.name}:${l.id}: could not verify "${l.title}" (${resolution.unresolved}), kept live`);
       }
     }
     const changes = mergeSnapshot(current, fresh, (l) => goneStatus.get(l.id) ?? 'active', now());
@@ -182,6 +192,7 @@ export function formatSyncMessage(config: Config, r: SyncReport): string {
   for (const p of r.priceDrops) lines.push(`📉 ${esc(p.listing.title)}: ${formatPrice(p.from)} → <b>${formatPrice(p.to)}</b>`);
   for (const g of r.gone) lines.push(`${g.status === 'sold' ? '✅ Sold' : '🚫 ' + g.status}: ${esc(g.listing.title)} · ${formatPrice(g.listing.price)} · ${daysBetween(g.listing.firstSeenAt, g.listing.soldAt ?? r.finishedAt)} days on site`);
   if (r.added.length + r.priceDrops.length + r.gone.length === 0) lines.push('No changes.');
+  if (r.unverified.length) lines.push(`\n⚠️ ${r.unverified.length} listing(s) could not be verified and stay live:\n` + r.unverified.slice(0, 3).map((u) => `• ${esc(u.listing.title)} — ${esc(u.reason)}`).join('\n'));
   if (r.errors.length) lines.push(`\n⚠️ ${r.errors.length} error(s):\n` + r.errors.slice(0, 3).map((e) => `• ${esc(e)}`).join('\n'));
   if (r.warnings.length) lines.push(`\n${r.warnings.length} warning(s):\n` + r.warnings.slice(0, 3).map((e) => `• ${esc(e)}`).join('\n'));
   return lines.join('\n');

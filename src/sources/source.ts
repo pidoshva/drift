@@ -10,6 +10,16 @@ export interface ListingSummary {
   partial: Listing; // best-effort listing built from the summary alone
 }
 
+/**
+ * Outcome of checking a listing that vanished from the source. `unresolved` is set when the
+ * check was inconclusive (rate limit, outage, parse failure): the job keeps the car and
+ * reports the reason so a persistent failure is visible, not silent.
+ */
+export interface GoneResolution {
+  status: ListingStatus;
+  unresolved?: string;
+}
+
 export interface InventorySource {
   readonly name: Listing['source'];
   /** Every listing currently for sale, as summaries. */
@@ -17,5 +27,5 @@ export interface InventorySource {
   /** Full listing (photos, description, specs). May throw; the job keeps the summary then. */
   fetchDetail(summary: ListingSummary): Promise<Listing>;
   /** Called for a listing that was active but is no longer in listSummaries(). */
-  resolveGone(listing: Listing): Promise<ListingStatus>;
+  resolveGone(listing: Listing): Promise<GoneResolution>;
 }

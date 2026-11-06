@@ -3,9 +3,9 @@
 //   search:  https://cars.ksl.com/search/memberId/<id>/page/<n>   (20 listings per page)
 //   detail:  https://cars.ksl.com/listing/<id>                    (photos, description, specs)
 // Details are fetched only for new/changed listings or when stale, keeping volume tiny.
-import { Listing, ListingStatus } from '../../core/listing.js';
+import { Listing } from '../../core/listing.js';
 import { Logger, log } from '../../core/logger.js';
-import { InventorySource, ListingSummary } from '../source.js';
+import { GoneResolution, InventorySource, ListingSummary } from '../source.js';
 import { HttpStatusError, KslClient } from './client.js';
 import { kslStatus, mapKslListing } from './map.js';
 import { parseDetailPage, parseSearchPage } from './rsc.js';
@@ -76,25 +76,25 @@ export class KslSource implements InventorySource {
    * 404/410 archives it; anything unresolved (rate limit, outage, layout change) keeps the car
    * so a KSL hiccup never removes inventory. The next run re-checks it.
    */
-  async resolveGone(listing: Listing): Promise<ListingStatus> {
+  async resolveGone(listing: Listing): Promise<GoneResolution> {
     const pastExpiry = Boolean(listing.sourceExpiresAt && Date.parse(listing.sourceExpiresAt) < Date.now());
     try {
       const html = await this.opts.client.getHtml(listing.url);
       const raw = parseDetailPage(html);
       const status = kslStatus(raw).toLowerCase();
       this.logger.debug('gone check', { id: listing.id, status });
-      if (status === 'active') return 'active';
-      if (status.includes('sold')) return 'sold';
-      if (status.includes('expire')) return 'expired';
+      if (status === 'active') return { status: 'active' };
+      if (status.includes('sold')) return { status: 'sold' };
+      if (status.includes('expire')) return { status: 'expired' };
       if (!status) {
         this.logger.warn('gone check: page has no status; keeping listing', { id: listing.id });
-        return 'active';
+        return { status: 'active', unresolved: 'listing page has no status (layout changed?)' };
       }
-      return pastExpiry ? 'expired' : 'sold';
+      return { status: pastExpiry ? 'expired' : 'sold' };
     } catch (err) {
-      if (err instanceof HttpStatusError && (err.status === 404 || err.status === 410)) return pastExpiry ? 'expired' : 'sold';
+      if (err instanceof HttpStatusError && (err.status === 404 || err.status === 410)) return { status: pastExpiry ? 'expired' : 'sold' };
       this.logger.warn('gone check failed; keeping listing until the next run', { id: listing.id, error: String(err) });
-      return 'active';
+      return { status: 'active', unresolved: (err as Error).message };
     }
   }
 }

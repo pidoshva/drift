@@ -71,6 +71,7 @@ export function mapKslListing(raw: Record<string, unknown>, now: string, detail:
     sourceStats: { pageViews: int(raw.pageViews), favorites: int(raw.favoriteCount) },
     priceHistory: [],
     detailFetchedAt: detail ? now : null,
+    statusLockedAt: null,
   };
   return { ...partial, hash: contentHash(partial) };
 }

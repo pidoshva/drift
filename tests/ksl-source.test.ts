@@ -15,20 +15,20 @@ const status = (code: number): typeof fetch => async () => new Response('', { st
 
 describe('KslSource.resolveGone', () => {
   it('404 / 410 -> sold', async () => {
-    expect(await source(status(404)).resolveGone(listing())).toBe('sold');
-    expect(await source(status(410)).resolveGone(listing())).toBe('sold');
+    expect(await source(status(404)).resolveGone(listing())).toEqual({ status: 'sold' });
+    expect(await source(status(410)).resolveGone(listing())).toEqual({ status: 'sold' });
   });
   it('404 past the listing expiry -> expired', async () => {
-    expect(await source(status(404)).resolveGone(listing({ sourceExpiresAt: '2020-01-01T00:00:00.000Z' }))).toBe('expired');
+    expect(await source(status(404)).resolveGone(listing({ sourceExpiresAt: '2020-01-01T00:00:00.000Z' }))).toEqual({ status: 'expired' });
   });
-  it('503 / 429 / network error / unparseable page -> active (kept, retried next run)', async () => {
-    expect(await source(status(503)).resolveGone(listing({ sourceExpiresAt: '2020-01-01T00:00:00.000Z' }))).toBe('active');
-    expect(await source(status(429)).resolveGone(listing())).toBe('active');
-    expect(await source(async () => { throw new TypeError('fetch failed'); }).resolveGone(listing())).toBe('active');
-    expect(await source(async () => new Response('<html>search page</html>', { status: 200 })).resolveGone(listing())).toBe('active');
+  it('503 / 429 / network error / unparseable page -> active with an unresolved reason', async () => {
+    expect(await source(status(503)).resolveGone(listing({ sourceExpiresAt: '2020-01-01T00:00:00.000Z' }))).toMatchObject({ status: 'active', unresolved: expect.stringMatching(/HTTP 503/) });
+    expect(await source(status(429)).resolveGone(listing())).toMatchObject({ status: 'active', unresolved: expect.stringMatching(/HTTP 429/) });
+    expect(await source(async () => { throw new TypeError('fetch failed'); }).resolveGone(listing())).toMatchObject({ status: 'active', unresolved: 'fetch failed' });
+    expect(await source(async () => new Response('<html>search page</html>', { status: 200 })).resolveGone(listing())).toMatchObject({ status: 'active', unresolved: expect.stringMatching(/listing block/) });
   });
-  it('page says Sold -> sold, page says Active -> active', async () => {
-    expect(await source(createMockKslFetch({ sold: ['90000100'] })).resolveGone(listing())).toBe('sold');
-    expect(await source(createMockKslFetch()).resolveGone(listing())).toBe('active');
+  it('page says Sold -> sold, page says Active -> active with no reason', async () => {
+    expect(await source(createMockKslFetch({ sold: ['90000100'] })).resolveGone(listing())).toEqual({ status: 'sold' });
+    expect(await source(createMockKslFetch()).resolveGone(listing())).toEqual({ status: 'active' });
   });
 });

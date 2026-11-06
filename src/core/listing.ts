@@ -47,6 +47,8 @@ export const ListingSchema = z.object({
   sourceStats: z.object({ pageViews: z.number().nullable().default(null), favorites: z.number().nullable().default(null) }).default({ pageViews: null, favorites: null }),
   priceHistory: z.array(z.object({ at: z.string(), price: z.number().nullable() })).default([]),
   detailFetchedAt: z.string().nullable().default(null),
+  /** Set by `drift listings mark <id> sold|removed|expired`; sync will not re-add the car while set. */
+  statusLockedAt: z.string().nullable().default(null),
   hash: z.string().default(''),
 });
 export type Listing = z.infer<typeof ListingSchema>;

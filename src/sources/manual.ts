@@ -3,9 +3,9 @@
 // Deleting the file marks the car as removed on the next sync.
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { Listing, ListingSchema, ListingStatus, contentHash } from '../core/listing.js';
+import { Listing, ListingSchema, contentHash } from '../core/listing.js';
 import { PATHS } from '../core/paths.js';
-import { InventorySource, ListingSummary } from './source.js';
+import { GoneResolution, InventorySource, ListingSummary } from './source.js';
 
 export class ManualSource implements InventorySource {
   readonly name = 'manual' as const;
@@ -25,5 +25,5 @@ export class ManualSource implements InventorySource {
   }
 
   async fetchDetail(summary: ListingSummary): Promise<Listing> { return summary.partial; }
-  async resolveGone(): Promise<ListingStatus> { return 'removed'; }
+  async resolveGone(): Promise<GoneResolution> { return { status: 'removed' }; }
 }

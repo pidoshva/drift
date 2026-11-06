@@ -63,6 +63,7 @@ Optional bot protection: Cloudflare Turnstile → `drift config set contact.turn
 | Change sync frequency | `drift schedule set sync --every 1h` → commit + push |
 | Trigger a sync now | `drift sync --remote` |
 | A car shows as sold by mistake | `drift listings mark <id> active` → push |
+| Hide a car KSL still lists (sold off-site) | `drift listings mark <id> sold` → push (sticks until marked `active`) |
 | Add a car that is not on KSL | `data/manual/<id>.json` (see `src/sources/manual.ts`) → push |
 | See leads / traffic | `drift leads`, `drift stats`, `/dash/` with the dashboard token |
 | See job history | `drift logs --remote`, `drift logs --actions` |

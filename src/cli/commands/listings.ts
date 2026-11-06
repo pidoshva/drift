@@ -1,7 +1,6 @@
 import { Command } from 'commander';
-import { loadArchive, loadInventory, writeInventoryFile } from '../../core/inventory.js';
+import { loadArchive, loadInventory, markListing } from '../../core/inventory.js';
 import { ListingStatusSchema, daysBetween, formatMileage, formatPrice, listingPath } from '../../core/listing.js';
-import { PATHS } from '../../core/paths.js';
 import { die, ok, printJson, table } from '../ui.js';
 
 export function registerListings(program: Command): void {
@@ -30,19 +29,11 @@ export function registerListings(program: Command): void {
     });
 
   cmd.command('mark <id> <status>')
-    .description('Force a status: active | sold | removed | expired (moves between inventory and archive)')
+    .description('Force a status: active | sold | removed | expired. A sold/removed/expired mark sticks across syncs until marked active again')
     .action((id, statusRaw) => {
       const status = ListingStatusSchema.parse(statusRaw);
-      const inv = loadInventory();
-      const arc = loadArchive();
-      const all = [...inv.listings, ...arc.listings];
-      const l = all.find((x) => x.id === id);
-      if (!l) die(`listing ${id} not found`);
-      const now = new Date().toISOString();
-      const updated = { ...l, status, soldAt: status === 'active' ? null : (l.soldAt ?? now) };
-      const rest = all.filter((x) => x.id !== id);
-      writeInventoryFile(PATHS.inventory, { ...inv, listings: [...rest.filter((x) => x.status === 'active'), ...(status === 'active' ? [updated] : [])] });
-      writeInventoryFile(PATHS.archive, { ...arc, listings: [...rest.filter((x) => x.status !== 'active'), ...(status !== 'active' ? [updated] : [])] });
-      ok(`${l.title} → ${status}. Run \`drift build\` (or push) to publish.`);
+      let l;
+      try { l = markListing(id, status); } catch (err) { die((err as Error).message); }
+      ok(`${l.title} → ${status}${status === 'active' ? '' : ' (locked; sync will not re-add it)'}. Run \`drift build\` (or push) to publish.`);
     });
 }

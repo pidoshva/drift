@@ -16,7 +16,7 @@ vi.mock('../src/core/paths.js', async (orig) => {
 });
 
 import { loadConfig } from '../src/core/config.js';
-import { loadArchive, loadInventory } from '../src/core/inventory.js';
+import { loadArchive, loadInventory, markListing } from '../src/core/inventory.js';
 import { formatSyncMessage, runSync } from '../src/jobs/sync.js';
 import { KslClient } from '../src/sources/ksl/client.js';
 import { KslSource } from '../src/sources/ksl/index.js';
@@ -82,12 +82,16 @@ describe('runSync with mock KSL', () => {
     expect(loadInventory().listings.find((l) => l.id === '90000100')).toMatchObject({ status: 'active', soldAt: null });
   });
 
-  it('keeps a car whose gone check fails (503) and archives it on 404', async () => {
+  it('keeps a car whose gone check fails (503), reports it as unverified, and archives it on 404', async () => {
     await runSync(config, { sources: [ksl()], notify: false });
     const r1 = await runSync(config, { sources: [kslWithBrokenDetail('90000100', 503, { sold: ['90000100'] })], notify: false });
     expect(r1.ok).toBe(true);
-    expect(r1.totals).toMatchObject({ active: 14, gone: 0 });
+    expect(r1.totals).toMatchObject({ active: 14, gone: 0, warnings: 1 });
     expect(r1.perSource.ksl).toMatchObject({ missing: 1 });
+    expect(r1.unverified.map((u) => u.listing.id)).toEqual(['90000100']);
+    expect(r1.unverified[0]!.reason).toMatch(/HTTP 503/);
+    expect(r1.warnings[0]).toMatch(/could not verify .*kept live/);
+    expect(formatSyncMessage(config, r1)).toContain('1 listing(s) could not be verified');
     expect(loadInventory().listings.find((l) => l.id === '90000100')!.status).toBe('active');
     const r2 = await runSync(config, { sources: [kslWithBrokenDetail('90000100', 404, { sold: ['90000100'] })], notify: false });
     expect(r2.gone.map((g) => [g.listing.id, g.status])).toEqual([['90000100', 'sold']]);
@@ -120,6 +124,24 @@ describe('runSync with mock KSL', () => {
     const msg = formatSyncMessage(config, r);
     expect(msg).toContain('📉');
     expect(msg).toContain('✅ Sold');
+  });
+
+  it('a hand mark to sold sticks across syncs while KSL still lists the car; marking active re-syncs it', async () => {
+    await runSync(config, { sources: [ksl()], notify: false });
+    const marked = markListing('90000100', 'sold', '2026-03-01T00:00:00.000Z');
+    expect(marked).toMatchObject({ status: 'sold', soldAt: '2026-03-01T00:00:00.000Z', statusLockedAt: '2026-03-01T00:00:00.000Z' });
+    expect(loadInventory().listings).toHaveLength(13);
+    const r1 = await runSync(config, { sources: [ksl()], notify: false });
+    expect(r1.totals).toMatchObject({ active: 13, added: 0, gone: 0, detailFetches: 0 });
+    expect(loadInventory().listings.map((l) => l.id)).not.toContain('90000100');
+    expect(loadArchive().listings.map((l) => l.id)).toEqual(['90000100']);
+    expect(loadArchive().listings[0]).toMatchObject({ status: 'sold', statusLockedAt: '2026-03-01T00:00:00.000Z' });
+    expect(markListing('90000100', 'active')).toMatchObject({ status: 'active', soldAt: null, statusLockedAt: null });
+    const r2 = await runSync(config, { sources: [ksl()], notify: false });
+    expect(r2.totals).toMatchObject({ active: 14, added: 0, gone: 0 });
+    expect(loadArchive().listings).toEqual([]);
+    expect(loadInventory().listings.find((l) => l.id === '90000100')).toMatchObject({ status: 'active', statusLockedAt: null });
+    expect(() => markListing('nope', 'sold')).toThrow(/not found/);
   });
 
   it('dry run writes nothing', async () => {
