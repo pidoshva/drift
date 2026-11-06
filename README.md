@@ -19,8 +19,10 @@ and shows a private **dashboard**. Operated with the `drift` CLI. Free to run. N
 ## How it works
 
 1. `sync.yml` runs every 2 hours on GitHub Actions: `drift sync` reads the dealer's public KSL
-   listings, writes `data/inventory.json` (for sale) and `data/archive.json` (sold), commits, then
-   `drift build` renders the site and deploys it to GitHub Pages.
+   listings, writes `data/inventory.json` (for sale) and `data/archive.json` (sold) and commits them.
+   A scheduled run then builds and deploys to GitHub Pages only when the inventory changed; pushes to
+   `main` and manual runs (`drift sync --remote`) always build and deploy, which is also the recovery
+   if a deploy ever fails.
 2. The site is plain HTML/CSS/JS. Each car page has a contact form and a "Call now" button.
 3. A tiny Cloudflare Worker receives contact-form posts and analytics beacons, stores them in D1,
    and sends each lead to Telegram as a card with the car's photo, price, links and the buyer's phone.

@@ -44,8 +44,10 @@ Optional bot protection: Cloudflare Turnstile → `drift config set contact.turn
 - Settings → Pages → Source: **GitHub Actions**. (Private repos need GitHub Pro for Pages; public repos are free.)
 - `./bin/drift config set site.url https://<user>.github.io/<repo>`. For a custom domain, set it in
   Settings → Pages (GitHub manages the CNAME) and then `drift config set site.url https://<domain>`.
-- Push to `main`. `sync.yml` runs (push + every 2 h), builds and deploys. `deploy-worker.yml` runs when
-  `worker/**` or `drift.config.json` change.
+- Push to `main`. `sync.yml` runs on push and every 2 h. Pushes and manual runs (`drift sync --remote`)
+  always build and deploy; a scheduled run deploys only when the inventory changed. If a deploy ever
+  fails, `drift sync --remote` re-runs it. `deploy-worker.yml` runs when `worker/**` or
+  `drift.config.json` change.
 - Demo mode before the KSL id exists: repo variable `DRIFT_MOCK_KSL=1`.
 
 ## 6. Verify

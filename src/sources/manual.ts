@@ -19,7 +19,7 @@ export class ManualSource implements InventorySource {
       const now = this.now();
       const parsed = ListingSchema.parse({ source: 'manual', firstSeenAt: now, lastSeenAt: now, status: 'active', ...raw, id: String(raw.id ?? file.replace(/\.json$/, '')) });
       const listing: Listing = { ...parsed, detailFetchedAt: now, hash: contentHash(parsed) };
-      out.push({ id: listing.id, price: listing.price, sourceUpdatedAt: null, partial: listing });
+      out.push({ id: listing.id, price: listing.price, sourceUpdatedAt: null, partial: listing, complete: true });
     }
     return out;
   }

@@ -83,6 +83,10 @@ export async function runSync(config: Config, opts: SyncOptions): Promise<SyncRe
     let fetched = 0;
     for (const s of summaries) {
       const before = currentById.get(s.id);
+      if (s.complete) {
+        fresh.push(before && before.hash === s.partial.hash ? { ...s.partial, detailFetchedAt: before.detailFetchedAt } : s.partial);
+        continue;
+      }
       const stale = !before?.detailFetchedAt || Date.now() - Date.parse(before.detailFetchedAt) > refreshMs;
       const changed = !before || before.price !== s.price || (s.sourceUpdatedAt && s.sourceUpdatedAt !== before.sourceUpdatedAt);
       const needDetail = opts.force || changed || stale;

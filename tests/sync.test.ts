@@ -192,6 +192,26 @@ describe('runSync with mock KSL', () => {
     expect(loadInventory().listings).toHaveLength(14);
   });
 
+  it('an edit to a manual listing file lands on the next sync; an unchanged file stays quiet', async () => {
+    const dir = join(tmp, 'manual');
+    const file = join(dir, 'm1.json');
+    const car = { id: 'm1', title: '2010 Honda Fit', year: 2010, make: 'Honda', model: 'Fit', price: 5500, description: 'Runs great.', photos: [] };
+    writeFileSync(file, JSON.stringify(car));
+    const r1 = await runSync(config, { sources: [ksl(), new ManualSource(dir)], notify: false });
+    expect(r1.totals).toMatchObject({ active: 15, added: 15, detailFetches: 14 });
+    const firstSeen = loadInventory().listings.find((l) => l.id === 'm1')!.firstSeenAt;
+    writeFileSync(file, JSON.stringify({ ...car, description: 'Runs great. New tires.', options: ['Bluetooth'] }));
+    const r2 = await runSync(config, { sources: [ksl(), new ManualSource(dir)], notify: false });
+    expect(r2.totals).toMatchObject({ active: 15, added: 0, updated: 1, gone: 0, detailFetches: 0 });
+    expect(r2.wrote).toBe(true);
+    const m1 = loadInventory().listings.find((l) => l.id === 'm1')!;
+    expect(m1).toMatchObject({ description: 'Runs great. New tires.', options: ['Bluetooth'], firstSeenAt: firstSeen });
+    expect(m1.priceHistory).toHaveLength(1);
+    const r3 = await runSync(config, { sources: [ksl(), new ManualSource(dir)], notify: false });
+    expect(r3.totals).toMatchObject({ updated: 0, detailFetches: 0 });
+    expect(r3.wrote).toBe(false);
+  });
+
   it('merges manual listings and removes them when the file disappears', async () => {
     const file = join(tmp, 'manual', 'm1.json');
     writeFileSync(file, JSON.stringify({ id: 'm1', title: '2010 Honda Fit', year: 2010, make: 'Honda', model: 'Fit', price: 5500, photos: [] }));

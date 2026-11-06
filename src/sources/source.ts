@@ -8,6 +8,8 @@ export interface ListingSummary {
   price: number | null;
   sourceUpdatedAt: string | null;
   partial: Listing; // best-effort listing built from the summary alone
+  /** `partial` already is the full listing (no detail page exists); the job uses it as-is, so every edit lands. */
+  complete?: boolean;
 }
 
 /**
