@@ -1,0 +1,35 @@
+{
+  "name": "drift",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Static dealership website + KSL inventory sync + contact relay, managed by the `drift` CLI",
+  "type": "module",
+  "bin": {
+    "drift": "./bin/drift"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@10.11.0",
+  "scripts": {
+    "drift": "node ./bin/drift",
+    "build": "node ./bin/drift build",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p worker/tsconfig.json --noEmit",
+    "lint": "pnpm typecheck",
+    "worker:dev": "wrangler dev --config worker/wrangler.toml",
+    "worker:deploy": "node ./bin/drift deploy worker"
+  },
+  "dependencies": {
+    "commander": "^15.0.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261106.1",
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0",
+    "wrangler": "^4.158.0"
+  }
+}

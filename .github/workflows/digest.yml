@@ -1,0 +1,23 @@
+# Daily business summary to Telegram. Schedule managed by `drift schedule set digest --cron '...'`.
+name: digest
+on:
+  schedule:
+    - cron: '0 14 * * *'  # drift:digest-cron
+  workflow_dispatch:
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Send digest
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          DRIFT_ADMIN_TOKEN: ${{ secrets.DRIFT_ADMIN_TOKEN }}
+        run: node ./bin/drift digest --send

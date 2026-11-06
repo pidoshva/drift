@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.drift/
+.env
+.wrangler/
+.DS_Store
+coverage/
+worker/wrangler.generated.toml
+worker/.dev.vars

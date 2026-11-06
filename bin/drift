@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+// Entry point for the `drift` CLI. Runs the TypeScript sources directly through tsx
+// so there is no build step for the CLI itself.
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+import { spawn } from 'node:child_process';
+
+const root = dirname(dirname(fileURLToPath(import.meta.url)));
+const tsx = join(root, 'node_modules', '.bin', 'tsx');
+const child = spawn(tsx, [join(root, 'src', 'cli', 'main.ts'), ...process.argv.slice(2)], {
+  stdio: 'inherit',
+  env: process.env,
+});
+child.on('exit', (code) => process.exit(code ?? 1));

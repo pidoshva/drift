@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Your new website — what we need from you</title>
+<style>
+  @page { size: Letter; margin: 0.8in 0.85in; }
+  body { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: #1a1a1a; font-size: 13.5pt; line-height: 1.5; margin: 0; }
+  h1 { font-size: 28pt; margin: 0 0 6pt; letter-spacing: -0.5pt; }
+  h2 { font-size: 18pt; margin: 26pt 0 8pt; padding-bottom: 4pt; border-bottom: 2px solid #1c5cab; color: #1c5cab; }
+  h3 { font-size: 14pt; margin: 16pt 0 4pt; }
+  p { margin: 0 0 9pt; }
+  .lead { font-size: 15pt; color: #444; }
+  .box { background: #f1f5fb; border-left: 5px solid #1c5cab; padding: 10pt 14pt; margin: 10pt 0 14pt; border-radius: 4pt; }
+  .warn { background: #fff6e5; border-left-color: #e08a00; }
+  ol.steps { padding-left: 0; list-style: none; counter-reset: s; }
+  ol.steps li { counter-increment: s; position: relative; padding-left: 34pt; margin-bottom: 9pt; }
+  ol.steps li::before { content: counter(s); position: absolute; left: 0; top: 1pt; width: 22pt; height: 22pt; border-radius: 50%; background: #1c5cab; color: #fff; font-weight: 700; text-align: center; line-height: 22pt; font-size: 12pt; }
+  code { background: #eee; padding: 1pt 5pt; border-radius: 3pt; font-size: 12.5pt; }
+  .check { list-style: none; padding-left: 0; }
+  .check li { padding-left: 26pt; position: relative; margin-bottom: 6pt; }
+  .check li::before { content: ""; position: absolute; left: 0; top: 4pt; width: 14pt; height: 14pt; border: 2px solid #1c5cab; border-radius: 3pt; }
+  table { border-collapse: collapse; width: 100%; font-size: 12.5pt; }
+  td, th { text-align: left; padding: 6pt 8pt; border-bottom: 1px solid #ddd; vertical-align: top; }
+  th { background: #f4f4f4; }
+  .page-break { page-break-before: always; }
+  .muted { color: #666; font-size: 12pt; }
+</style></head><body>
+
+<h1>Your new website</h1>
+<p class="lead">It updates itself from your KSL listings, sends every customer message straight to your phone, and shows you how your cars are doing. You never have to touch it.</p>
+
+<div class="box">
+<strong>What we need from you (about 15 minutes total):</strong>
+<ul class="check">
+  <li>A link to one of your cars on KSL (so we can find your dealer account)</li>
+  <li>A Telegram "bot" that you create — 5 taps, instructions below</li>
+  <li>The phone number and email where customer messages should go</li>
+  <li>Your business details: name, address, hours, a short "about us", a logo if you have one</li>
+</ul>
+</div>
+
+<h2>1. Your KSL account</h2>
+<p>The website reads the cars you have listed on KSL and shows them with photos, prices and details. When a car is gone from KSL, it disappears from the website within about two hours and is counted as sold.</p>
+<ol class="steps">
+  <li>Open <strong>cars.ksl.com</strong>, log in, and open <strong>any one of your car listings</strong>.</li>
+  <li>Copy the link from the top of the browser (it looks like <code>cars.ksl.com/listing/12345678</code>).</li>
+  <li>Send us that link. That's it — we don't need your KSL password, and nothing changes on KSL.</li>
+</ol>
+<div class="box warn"><strong>Good to know:</strong> keep listing your cars on KSL exactly as you do today. Add a car there → it shows up on your website. Sell it and remove the listing → it's marked sold on the website. No extra work.</div>
+
+<h2>2. Create your Telegram bot (where messages arrive)</h2>
+<p>Telegram is a free messaging app. A "bot" is just a private chat that only you can see. When a customer fills in the contact form on your website, you get a message there within seconds — with the car's photo, the price, the customer's name, phone number and message. You then just call them.</p>
+<ol class="steps">
+  <li>Install <strong>Telegram</strong> from the App Store / Google Play and sign in with your phone number.</li>
+  <li>In the search box at the top, type <strong>BotFather</strong> and open the one with the blue check mark.</li>
+  <li>Tap <strong>Start</strong>, then send the message <code>/newbot</code>.</li>
+  <li>It asks for a <strong>name</strong>: type something like <code>My Dealership Leads</code>.</li>
+  <li>It asks for a <strong>username</strong>: must end in "bot", e.g. <code>mydealership_leads_bot</code>. If it says taken, try another.</li>
+  <li>BotFather replies with a long code that looks like <code>7123456789:AAH8f...</code>. This is the <strong>token</strong>. Copy it.</li>
+  <li><strong>Send the token to us privately</strong> (text message or in person — not in a public post). It is like a password for the bot.</li>
+  <li>Tap the link to your new bot in BotFather's message, press <strong>Start</strong>, and send it any message, like "hello". This lets the bot find you.</li>
+</ol>
+<p class="muted">Want your staff to see leads too? Create a Telegram group, add the bot to it, and tell us the group name. We can route messages there instead.</p>
+
+<div class="page-break"></div>
+
+<h2>3. Phone, email and business details</h2>
+<p>Please fill this in (or just text it to us):</p>
+<table>
+  <tr><th style="width:38%">Item</th><th>Your answer</th></tr>
+  <tr><td>Business name (as it should appear on the site)</td><td>&nbsp;</td></tr>
+  <tr><td>Phone number for the "Call now" button</td><td>&nbsp;</td></tr>
+  <tr><td>Email for messages (optional)</td><td>&nbsp;</td></tr>
+  <tr><td>Address</td><td>&nbsp;</td></tr>
+  <tr><td>Opening hours</td><td>&nbsp;</td></tr>
+  <tr><td>One-line slogan (e.g. "Quality used cars, fair prices")</td><td>&nbsp;</td></tr>
+  <tr><td>A few sentences "About us"</td><td>&nbsp;</td></tr>
+  <tr><td>Logo file, Facebook page link (optional)</td><td>&nbsp;</td></tr>
+  <tr><td>Website address you'd like (optional, e.g. yourname-cars.com, about $10/year)</td><td>&nbsp;</td></tr>
+</table>
+
+<h2>4. What happens after that</h2>
+<ul>
+  <li><strong>Every 2 hours</strong> the website checks KSL and updates itself: new cars, price changes, sold cars.</li>
+  <li><strong>Customer messages</strong> land in your Telegram bot chat with the car photo and the customer's phone number.</li>
+  <li><strong>Every morning</strong> you get a short Telegram summary: visitors yesterday, most viewed cars, new messages, cars sold this month.</li>
+  <li><strong>Dashboard:</strong> we'll give you a private link and a code. It shows views per car, where visitors come from, which cars sell fastest, and all leads.</li>
+</ul>
+
+<h2>Questions you might have</h2>
+<p><strong>Do I need to update the website?</strong> No. Keep using KSL as usual.</p>
+<p><strong>A car shows as sold but it isn't (or the other way round)?</strong> Check the KSL listing is still active; if it is, text us and we fix it in a minute.</p>
+<p><strong>Can I change the look, photos or text?</strong> Yes — tell us what you want; design changes are quick.</p>
+<p><strong>What does it cost?</strong> Nothing to run. Only an optional custom web address (about $10/year).</p>
+<p><strong>Is my data safe?</strong> Customer messages go only to your Telegram (and your email if you want). The site never shows customer information publicly.</p>
+
+<p class="muted" style="margin-top:28pt">Keep this page: it's everything needed to get you live.</p>
+</body></html>

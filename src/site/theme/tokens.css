@@ -1,0 +1,54 @@
+/* ==========================================================================
+   DESIGN TOKENS — the first place to look when changing how the site looks.
+   Colors, fonts, spacing, radii. Everything else in base.css/components.css
+   references these variables. Dark mode is automatic (prefers-color-scheme).
+   ========================================================================== */
+:root {
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-sans);
+
+  --color-bg: #f7f7f5;
+  --color-surface: #ffffff;
+  --color-surface-2: #f0efec;
+  --color-text: #141414;
+  --color-text-muted: #5c5b57;
+  --color-border: #e2e1dc;
+
+  --color-primary: #1c5cab;        /* buttons, links, accents */
+  --color-primary-hover: #104281;
+  --color-primary-contrast: #ffffff;
+  --color-accent: #eb6834;         /* badges like "Price drop" */
+  --color-success: #0ca30c;
+  --color-danger: #d03b3b;
+
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.06);
+  --shadow-hover: 0 2px 4px rgba(0,0,0,.08), 0 16px 40px rgba(0,0,0,.12);
+
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 72px;
+  --container: 1200px;
+  --gutter: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #121211;
+    --color-surface: #1a1a19;
+    --color-surface-2: #242422;
+    --color-text: #f0efec;
+    --color-text-muted: #b5b4ad;
+    --color-border: #32322f;
+    --color-primary: #3987e5;
+    --color-primary-hover: #5598e7;
+    --color-primary-contrast: #0b0b0b;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.4);
+    --shadow-hover: 0 2px 4px rgba(0,0,0,.5), 0 16px 40px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"] {
+  --color-bg: #121211; --color-surface: #1a1a19; --color-surface-2: #242422; --color-text: #f0efec;
+  --color-text-muted: #b5b4ad; --color-border: #32322f; --color-primary: #3987e5; --color-primary-hover: #5598e7; --color-primary-contrast: #0b0b0b;
+}

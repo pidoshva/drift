@@ -1,0 +1,24 @@
+# Template. `drift deploy worker` and `drift worker dev` render worker/wrangler.generated.toml
+# from this file + drift.config.json (vars, D1 id). Do not put secrets here: they come from .env via
+# `drift worker secrets` (see .env.example for the names).
+name = "drift"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+[observability]
+enabled = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "drift"
+database_id = "__D1_DATABASE_ID__"
+
+[vars]
+SITE_URL = "__SITE_URL__"
+DEALER_NAME = "__DEALER_NAME__"
+TELEGRAM_CHAT_ID = "__TELEGRAM_CHAT_ID__"
+CONTACT_EMAIL = "__CONTACT_EMAIL__"
+CONTACT_FROM_EMAIL = "__CONTACT_FROM_EMAIL__"
+CONTACT_METHODS = "__CONTACT_METHODS__"
+IP_MODE = "__IP_MODE__"
