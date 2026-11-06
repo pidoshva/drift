@@ -42,7 +42,7 @@ export function registerSync(program: Command): void {
       if (opts.json) { printJson(report); return; }
       heading(`Sync ${report.ok ? 'finished' : 'finished with errors'} in ${(report.durationMs / 1000).toFixed(1)}s${report.dryRun ? ' (dry run)' : ''}`);
       table(Object.entries(report.perSource).map(([source, s]) => ({ source, ...s })));
-      info(`${report.totals.active} active · ${report.totals.detailFetches} detail fetches${report.totals.warnings ? ` · ${report.totals.warnings} warning(s)` : ''}`);
+      info(`${report.totals.active} active · ${report.totals.detailFetches} detail fetches${report.totals.warnings ? ` · ${report.totals.warnings} warning(s)` : ''}${report.dryRun ? '' : report.wrote ? ' · data/ written' : ' · no changes, data/ untouched'}`);
       for (const l of report.added) ok(`added   ${l.title} ${formatPrice(l.price)}`);
       for (const p of report.priceDrops) info(`price   ${p.listing.title} ${formatPrice(p.from)} → ${formatPrice(p.to)}`);
       for (const g of report.gone) warn(`${g.status.padEnd(7)} ${g.listing.title}`);

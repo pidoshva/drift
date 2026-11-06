@@ -102,6 +102,10 @@ Set repo variable `DRIFT_MOCK_KSL=1` to make the scheduled sync use mock data (d
   failures are `report.warnings`, data is still written and the workflow still commits and deploys.
 - `data/inventory.json` and `data/archive.json` are committed by the sync workflow (bot commit on main).
   Never hand-edit them; use `drift listings mark` or `data/manual/*.json`.
+- Quiet runs write nothing: `runSync` rewrites `data/` only when `inventoryKey()` (id, hash, status,
+  detailFetchedAt, expiry, lock) differs, so `syncedAt` / `lastSeenAt` / search-row favorites may lag until
+  the next real change. `report.wrote` says whether files changed; `sync.yml` skips the Pages deploy on a
+  scheduled run with no commit (push and `workflow_dispatch` always deploy).
 - Logs never crash a job. Telegram/worker reporting is best-effort. KSL failure keeps the last inventory.
 - The sync workflow concurrency group is `sync`; it also deploys Pages, so never add a second Pages deploy.
 - Keep dependencies minimal (commander, zod + dev tooling). No CSS/JS frameworks.

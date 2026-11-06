@@ -1,5 +1,5 @@
 // End-to-end sync against the mock KSL, in a temp data directory.
-import { readFileSync, rmSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, rmSync, statSync, writeFileSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -42,6 +42,7 @@ describe('runSync with mock KSL', () => {
   it('first run adds every seed listing with details, paging through 5-per-page', async () => {
     const r = await runSync(config, { sources: [ksl()], notify: false });
     expect(r.ok).toBe(true);
+    expect(r.wrote).toBe(true);
     expect(r.totals).toMatchObject({ active: 14, added: 14, updated: 0, gone: 0, detailFetches: 14 });
     const inv = loadInventory();
     expect(inv.listings).toHaveLength(14);
@@ -54,6 +55,7 @@ describe('runSync with mock KSL', () => {
     const before = loadInventory().listings;
     const r = await runSync(config, { sources: [ksl()], notify: false });
     expect(r.ok).toBe(true);
+    expect(r.wrote).toBe(false);
     expect(r.totals).toMatchObject({ added: 0, updated: 0, gone: 0, detailFetches: 0, warnings: 0 });
     const after = loadInventory().listings;
     expect(after.map((l) => l.id + l.hash)).toEqual(before.map((l) => l.id + l.hash));
@@ -115,6 +117,21 @@ describe('runSync with mock KSL', () => {
     expect(formatSyncMessage(config, r)).toContain('1 warning(s)');
   });
 
+  it('a quiet run leaves data/ byte-for-byte untouched; a price change writes', async () => {
+    await runSync(config, { sources: [ksl()], notify: false });
+    const files = [join(tmp, 'inventory.json'), join(tmp, 'archive.json')];
+    const snapshot = files.map((f) => ({ text: readFileSync(f, 'utf8'), mtime: statSync(f).mtimeMs }));
+    await new Promise((r) => setTimeout(r, 20));
+    const quiet = await runSync(config, { sources: [ksl()], notify: false });
+    expect(quiet.wrote).toBe(false);
+    expect(files.map((f) => ({ text: readFileSync(f, 'utf8'), mtime: statSync(f).mtimeMs }))).toEqual(snapshot);
+    const priced = await runSync(config, { sources: [ksl({ prices: { '90000101': 19999 } })], notify: false });
+    expect(priced.wrote).toBe(true);
+    expect(priced.totals.updated).toBe(1);
+    expect(readFileSync(files[0]!, 'utf8')).not.toBe(snapshot[0]!.text);
+    expect(loadInventory().listings.find((l) => l.id === '90000101')!.price).toBe(19999);
+  });
+
   it('detects price drops and sold cars, moving sold ones to the archive', async () => {
     await runSync(config, { sources: [ksl()], notify: false });
     const r = await runSync(config, { sources: [ksl({ sold: ['90000100', '90000105'], prices: { '90000101': 19999 } })], notify: false });
@@ -162,6 +179,7 @@ describe('runSync with mock KSL', () => {
   it('dry run writes nothing', async () => {
     const r = await runSync(config, { sources: [ksl()], notify: false, dryRun: true });
     expect(r.totals.added).toBe(14);
+    expect(r.wrote).toBe(false);
     expect(loadInventory().listings).toHaveLength(0);
   });
 

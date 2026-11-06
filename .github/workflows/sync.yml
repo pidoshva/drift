@@ -48,20 +48,28 @@ jobs:
         run: node ./bin/drift sync ${{ inputs.force && '--force' || '' }}
 
       - name: Commit inventory changes
+        id: commit
         run: |
-          if git diff --quiet -- data; then echo "no inventory changes"; exit 0; fi
+          if git diff --quiet -- data; then echo "no inventory changes"; echo "changed=false" >> "$GITHUB_OUTPUT"; exit 0; fi
           git config user.name "drift-bot"
           git config user.email "drift-bot@users.noreply.github.com"
           git add data
           git commit -m "sync: inventory $(date -u +%Y-%m-%dT%H:%MZ)"
           git pull --rebase origin main
           git push origin HEAD:main
+          echo "changed=true" >> "$GITHUB_OUTPUT"
 
+      # Scheduled runs redeploy only when inventory changed; pushes and manual runs always deploy
+      # (code, config or theme may have changed even if data/ did not).
       - name: Build site
+        if: steps.commit.outputs.changed == 'true' || github.event_name != 'schedule'
         run: node ./bin/drift build
       - uses: actions/configure-pages@v5
+        if: steps.commit.outputs.changed == 'true' || github.event_name != 'schedule'
       - uses: actions/upload-pages-artifact@v3
+        if: steps.commit.outputs.changed == 'true' || github.event_name != 'schedule'
         with:
           path: dist
       - id: deployment
+        if: steps.commit.outputs.changed == 'true' || github.event_name != 'schedule'
         uses: actions/deploy-pages@v4

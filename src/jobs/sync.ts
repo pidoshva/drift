@@ -1,5 +1,6 @@
 // The sync job: pull inventory from every enabled source, merge into data/, report.
 // Runs on a schedule in GitHub Actions (`.github/workflows/sync.yml`) and locally via `drift sync`.
+import { existsSync } from 'node:fs';
 import { Config, siteUrl } from '../core/config.js';
 import { secret } from '../core/env.js';
 import { Listing, ListingStatus, daysBetween, formatPrice, listingPath } from '../core/listing.js';
@@ -29,6 +30,8 @@ export interface SyncReport {
   durationMs: number;
   ok: boolean;
   dryRun: boolean;
+  /** data/ files were rewritten. False on dry runs and on quiet runs where nothing real changed. */
+  wrote: boolean;
   perSource: Record<string, Record<string, number>>;
   totals: { active: number; added: number; updated: number; gone: number; detailFetches: number; errors: number; warnings: number };
   added: Listing[];
@@ -49,7 +52,7 @@ export async function runSync(config: Config, opts: SyncOptions): Promise<SyncRe
   const inventory = loadInventory();
   const archive = loadArchive();
   const report: SyncReport = {
-    startedAt, finishedAt: startedAt, durationMs: 0, ok: true, dryRun: Boolean(opts.dryRun), perSource: {},
+    startedAt, finishedAt: startedAt, durationMs: 0, ok: true, dryRun: Boolean(opts.dryRun), wrote: false, perSource: {},
     totals: { active: 0, added: 0, updated: 0, gone: 0, detailFetches: 0, errors: 0, warnings: 0 }, added: [], gone: [], priceDrops: [], unverified: [], errors: [], warnings: [],
   };
   const nextActive: Listing[] = [];
@@ -133,23 +136,41 @@ export async function runSync(config: Config, opts: SyncOptions): Promise<SyncRe
   report.finishedAt = now();
   report.durationMs = Date.now() - t0;
 
-  if (!opts.dryRun) {
+  const changed = !existsSync(PATHS.inventory) || !existsSync(PATHS.archive)
+    || inventoryKey(inventory.listings) !== inventoryKey(nextActive)
+    || inventoryKey(archive.listings) !== inventoryKey(archived);
+  if (opts.dryRun) {
+    logger.info('dry run: nothing written', { ...report.totals, changed });
+  } else if (changed) {
     writeInventoryFile(PATHS.inventory, { version: 1, syncedAt: report.finishedAt, listings: nextActive });
     writeInventoryFile(PATHS.archive, { version: 1, syncedAt: report.finishedAt, listings: archived });
+    report.wrote = true;
     logger.info('inventory written', { active: nextActive.length, archived: archived.length });
   } else {
-    logger.info('dry run: nothing written', report.totals);
+    logger.info('no inventory changes; data/ left untouched', report.totals);
   }
 
   if (opts.notify !== false && !opts.dryRun) {
     await postJobEvent(config, 'sync', report.ok ? 'ok' : 'error', {
       ...report.totals, perSource: report.perSource, durationMs: report.durationMs,
-      errors: report.errors.slice(0, 5), warnings: report.warnings.slice(0, 5),
+      errors: report.errors.slice(0, 5), warnings: report.warnings.slice(0, 5), wrote: report.wrote,
       unverified: report.unverified.slice(0, 5).map((u) => `${u.listing.id}: ${u.reason}`),
     });
     if (shouldNotify(config, report)) await notifySync(config, report);
   }
   return report;
+}
+
+/**
+ * Fingerprint of what the site and the gone check actually depend on. Timestamps that merely
+ * say "seen again" (lastSeenAt, syncedAt) and search-row stats are left out so a quiet run
+ * produces no file change, no bot commit and no redeploy.
+ */
+export function inventoryKey(listings: Listing[]): string {
+  return listings
+    .map((l) => [l.id, l.hash, l.status, l.detailFetchedAt, l.sourceExpiresAt, l.statusLockedAt].join('|'))
+    .sort()
+    .join('\n');
 }
 
 /**
