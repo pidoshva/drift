@@ -28,6 +28,15 @@ describe('mergeSnapshot', () => {
     expect(ch.updated[0]!.after.firstSeenAt).toBe('2025-12-01T00:00:00.000Z');
     expect(ch.updated[0]!.after.priceHistory).toEqual([{ at: '2025-12-01T00:00:00.000Z', price: 100 }, { at: NOW, price: 90 }]);
   });
+  it('unchanged listings still take the refreshed expiry and keep the earliest createdAt', () => {
+    const before = mk({ id: 'a', sourceExpiresAt: '2026-01-10T00:00:00.000Z', sourceCreatedAt: '2025-12-01T00:00:00.000Z', detailFetchedAt: '2025-12-01T00:00:00.000Z' });
+    const fresh = mk({ id: 'a', sourceExpiresAt: '2026-03-10T00:00:00.000Z', sourceCreatedAt: '2026-01-05T00:00:00.000Z' });
+    const ch = mergeSnapshot([before], [fresh], () => 'sold', NOW);
+    expect(ch.updated).toEqual([]);
+    expect(ch.unchanged[0]).toMatchObject({ sourceExpiresAt: '2026-03-10T00:00:00.000Z', sourceCreatedAt: '2025-12-01T00:00:00.000Z', detailFetchedAt: '2025-12-01T00:00:00.000Z' });
+    const noCreated = mergeSnapshot([mk({ id: 'b', sourceCreatedAt: null })], [mk({ id: 'b', sourceCreatedAt: '2026-01-05T00:00:00.000Z' })], () => 'sold', NOW);
+    expect(noCreated.unchanged[0]!.sourceCreatedAt).toBe('2026-01-05T00:00:00.000Z');
+  });
   it('keeps a listing active when resolveGone says it is still active (search glitch)', () => {
     const ch = mergeSnapshot([mk({ id: 'a' })], [], () => 'active', NOW);
     expect(ch.missing.map((l) => l.id)).toEqual(['a']);

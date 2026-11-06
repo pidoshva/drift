@@ -108,7 +108,6 @@ export async function runSync(config: Config, opts: SyncOptions): Promise<SyncRe
       if (resolution.unresolved) {
         slog.warn('could not verify missing listing; kept live until the next run', { id: l.id, reason: resolution.unresolved });
         report.unverified.push({ listing: l, reason: resolution.unresolved });
-        report.warnings.push(`${source.name}:${l.id}: could not verify "${l.title}" (${resolution.unresolved}), kept live`);
       }
     }
     const changes = mergeSnapshot(current, fresh, (l) => goneStatus.get(l.id) ?? 'active', now());
@@ -129,7 +128,7 @@ export async function runSync(config: Config, opts: SyncOptions): Promise<SyncRe
 
   report.totals.active = nextActive.length;
   report.totals.errors = report.errors.length;
-  report.totals.warnings = report.warnings.length;
+  report.totals.warnings = report.warnings.length + report.unverified.length;
   report.ok = report.errors.length === 0;
   report.finishedAt = now();
   report.durationMs = Date.now() - t0;
@@ -142,13 +141,28 @@ export async function runSync(config: Config, opts: SyncOptions): Promise<SyncRe
     logger.info('dry run: nothing written', report.totals);
   }
 
-  const changed = report.totals.added + report.totals.updated + report.totals.gone > 0;
   if (opts.notify !== false && !opts.dryRun) {
-    await postJobEvent(config, 'sync', report.ok ? 'ok' : 'error', { ...report.totals, perSource: report.perSource, durationMs: report.durationMs, errors: report.errors.slice(0, 5), warnings: report.warnings.slice(0, 5) });
-    const mode = config.sync.notify;
-    if (mode === 'always' || (mode === 'changes' && (changed || !report.ok))) await notifySync(config, report);
+    await postJobEvent(config, 'sync', report.ok ? 'ok' : 'error', {
+      ...report.totals, perSource: report.perSource, durationMs: report.durationMs,
+      errors: report.errors.slice(0, 5), warnings: report.warnings.slice(0, 5),
+      unverified: report.unverified.slice(0, 5).map((u) => `${u.listing.id}: ${u.reason}`),
+    });
+    if (shouldNotify(config, report)) await notifySync(config, report);
   }
   return report;
+}
+
+/**
+ * Whether this run deserves a Telegram message. `changes` mode fires on any add/update/sale,
+ * on a source failure, and whenever a missing car could not be verified (so a persistent
+ * KSL problem is never silent).
+ */
+export function shouldNotify(config: Config, r: Pick<SyncReport, 'ok' | 'totals' | 'unverified'>): boolean {
+  const mode = config.sync.notify;
+  if (mode === 'always') return true;
+  if (mode === 'never') return false;
+  const changed = r.totals.added + r.totals.updated + r.totals.gone > 0;
+  return changed || !r.ok || r.unverified.length > 0;
 }
 
 /**

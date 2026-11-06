@@ -68,6 +68,11 @@ export class KslSource implements InventorySource {
       ...full,
       photos: full.photos.length ? full.photos : summary.partial.photos,
       sourceCreatedAt: full.sourceCreatedAt ?? summary.partial.sourceCreatedAt,
+      sourceExpiresAt: full.sourceExpiresAt ?? summary.partial.sourceExpiresAt,
+      sourceStats: {
+        pageViews: full.sourceStats.pageViews ?? summary.partial.sourceStats.pageViews,
+        favorites: full.sourceStats.favorites ?? summary.partial.sourceStats.favorites,
+      },
     };
   }
 

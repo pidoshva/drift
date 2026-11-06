@@ -17,7 +17,7 @@ vi.mock('../src/core/paths.js', async (orig) => {
 
 import { loadConfig } from '../src/core/config.js';
 import { loadArchive, loadInventory, markListing } from '../src/core/inventory.js';
-import { formatSyncMessage, runSync } from '../src/jobs/sync.js';
+import { formatSyncMessage, runSync, shouldNotify } from '../src/jobs/sync.js';
 import { KslClient } from '../src/sources/ksl/client.js';
 import { KslSource } from '../src/sources/ksl/index.js';
 import { createMockKslFetch } from '../src/sources/ksl/mock.js';
@@ -90,8 +90,12 @@ describe('runSync with mock KSL', () => {
     expect(r1.perSource.ksl).toMatchObject({ missing: 1 });
     expect(r1.unverified.map((u) => u.listing.id)).toEqual(['90000100']);
     expect(r1.unverified[0]!.reason).toMatch(/HTTP 503/);
-    expect(r1.warnings[0]).toMatch(/could not verify .*kept live/);
-    expect(formatSyncMessage(config, r1)).toContain('1 listing(s) could not be verified');
+    expect(r1.warnings).toEqual([]);
+    const msg = formatSyncMessage(config, r1);
+    expect(msg).toContain('1 listing(s) could not be verified');
+    expect(msg).not.toContain('warning(s)');
+    expect(msg.match(/HTTP 503/g)).toHaveLength(1);
+    expect(shouldNotify(config, r1)).toBe(true);
     expect(loadInventory().listings.find((l) => l.id === '90000100')!.status).toBe('active');
     const r2 = await runSync(config, { sources: [kslWithBrokenDetail('90000100', 404, { sold: ['90000100'] })], notify: false });
     expect(r2.gone.map((g) => [g.listing.id, g.status])).toEqual([['90000100', 'sold']]);
@@ -142,6 +146,17 @@ describe('runSync with mock KSL', () => {
     expect(loadArchive().listings).toEqual([]);
     expect(loadInventory().listings.find((l) => l.id === '90000100')).toMatchObject({ status: 'active', statusLockedAt: null });
     expect(() => markListing('nope', 'sold')).toThrow(/not found/);
+  });
+
+  it('shouldNotify: changes mode fires on changes, failures and unverified cars; always/never override', async () => {
+    const quiet = await (async () => { await runSync(config, { sources: [ksl()], notify: false }); return runSync(config, { sources: [ksl()], notify: false }); })();
+    const changes = { ...config, sync: { ...config.sync, notify: 'changes' as const } };
+    expect(shouldNotify(changes, quiet)).toBe(false);
+    expect(shouldNotify(changes, { ...quiet, totals: { ...quiet.totals, updated: 1 } })).toBe(true);
+    expect(shouldNotify(changes, { ...quiet, ok: false })).toBe(true);
+    expect(shouldNotify(changes, { ...quiet, unverified: [{ listing: quiet.added[0] ?? loadInventory().listings[0]!, reason: 'HTTP 503' }] })).toBe(true);
+    expect(shouldNotify({ ...config, sync: { ...config.sync, notify: 'always' } }, quiet)).toBe(true);
+    expect(shouldNotify({ ...config, sync: { ...config.sync, notify: 'never' } }, { ...quiet, ok: false, totals: { ...quiet.totals, added: 3 } })).toBe(false);
   });
 
   it('dry run writes nothing', async () => {

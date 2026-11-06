@@ -93,8 +93,9 @@ Set repo variable `DRIFT_MOCK_KSL=1` to make the scheduled sync use mock data (d
   (`ADMIN_TOKEN` = everything, `DASHBOARD_TOKEN` = `GET /admin/stats` only).
 - Sold detection: a listing missing from the dealer's KSL search → fetch its page; `Active` keeps it,
   a confirmed non-Active status or 404/410 → `sold` (or `expired` past `expiresAt`). Any other failure
-  (429/5xx, network, parse) keeps the car, lists it under `report.unverified` / `report.warnings` (CLI and
-  Telegram show "could not be verified") and re-checks next run.
+  (429/5xx, network, parse) keeps the car, lists it under `report.unverified` (counted in `totals.warnings`;
+  CLI and Telegram show "could not be verified"; in `sync.notify=changes` mode it triggers the Telegram
+  report by itself) and re-checks next run.
 - `drift listings mark <id> sold|removed|expired` sets `statusLockedAt`; sync skips that id (no re-add, no
   detail fetch) and keeps it archived even while KSL still lists it, until `drift listings mark <id> active`.
 - `drift sync` exits non-zero only when a whole source failed (`report.errors`); per-listing detail/gone-check

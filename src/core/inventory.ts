@@ -90,7 +90,15 @@ export function mergeSnapshot(
     };
     if (!before) changes.added.push(after);
     else if (before.hash !== after.hash) changes.updated.push({ before, after });
-    else changes.unchanged.push({ ...before, lastSeenAt: now, sourceStats: after.sourceStats, sourceUpdatedAt: after.sourceUpdatedAt, detailFetchedAt: after.detailFetchedAt ?? before.detailFetchedAt });
+    else changes.unchanged.push({
+      ...before,
+      lastSeenAt: now,
+      sourceStats: after.sourceStats,
+      sourceUpdatedAt: after.sourceUpdatedAt,
+      sourceExpiresAt: after.sourceExpiresAt,
+      sourceCreatedAt: before.sourceCreatedAt ?? after.sourceCreatedAt,
+      detailFetchedAt: after.detailFetchedAt ?? before.detailFetchedAt,
+    });
   }
 
   for (const existing of current) {
