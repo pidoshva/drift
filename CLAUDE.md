@@ -92,7 +92,10 @@ Set repo variable `DRIFT_MOCK_KSL=1` to make the scheduled sync use mock data (d
 - Worker CORS allows only `SITE_URL` origin + localhost. `/admin/*` needs `Authorization: Bearer`
   (`ADMIN_TOKEN` = everything, `DASHBOARD_TOKEN` = `GET /admin/stats` only).
 - Sold detection: a listing missing from the dealer's KSL search → fetch its page; `Active` keeps it,
-  anything else/404 → `sold` (or `expired` past `expiresAt`). Fix mistakes with `drift listings mark`.
+  a confirmed non-Active status or 404/410 → `sold` (or `expired` past `expiresAt`). Any other failure
+  (429/5xx, network, parse) keeps the car and re-checks next run. Fix mistakes with `drift listings mark`.
+- `drift sync` exits non-zero only when a whole source failed (`report.errors`); per-listing detail/gone-check
+  failures are `report.warnings`, data is still written and the workflow still commits and deploys.
 - `data/inventory.json` and `data/archive.json` are committed by the sync workflow (bot commit on main).
   Never hand-edit them; use `drift listings mark` or `data/manual/*.json`.
 - Logs never crash a job. Telegram/worker reporting is best-effort. KSL failure keeps the last inventory.

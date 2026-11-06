@@ -26,6 +26,15 @@ export function mockFromEnv(): MockOptions {
   return { sold, prices };
 }
 
+/** Keys a real cars.ksl.com search row carries (see tests/fixtures/ksl-search-page.html). Everything else is detail-only. */
+export const SEARCH_ROW_KEYS = ['id', 'title', 'createdAt', 'expiresAt', 'primaryImage', 'location', 'contact', 'make', 'model', 'trim', 'makeYear', 'mileage', 'newUsed', 'price', 'msrp', 'sellerType', 'dealer', 'vin', 'favoriteCount'] as const;
+
+export function toSearchRow(listing: Record<string, unknown>): Record<string, unknown> {
+  const row: Record<string, unknown> = {};
+  for (const k of SEARCH_ROW_KEYS) if (k in listing) row[k] = listing[k];
+  return row;
+}
+
 function flightPage(rows: string): string {
   const chunk = JSON.stringify(rows);
   return `<!DOCTYPE html><html><head><title>mock ksl</title></head><body><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,${chunk}])</script></body></html>`;
@@ -43,7 +52,7 @@ export function createMockKslFetch(opts: MockOptions = {}): typeof fetch {
     const search = /^\/search\/memberId\/([^/]+)(?:\/page\/(\d+))?$/.exec(url.pathname);
     if (search) {
       const page = Number(search[2] ?? '1');
-      const items = active.slice((page - 1) * perPage, page * perPage).map(({ description: _d, photos: _p, options: _o, ...row }) => row);
+      const items = active.slice((page - 1) * perPage, page * perPage).map(toSearchRow);
       const rows = `4a:["$","$L4c",null,{"initialState":{"results":${JSON.stringify([items])},"pageInfo":[{"hasNextPage":${page * perPage < active.length},"endCursor":"x","total":${active.length}}]},"children":"$L4d"}]\n`;
       return new Response(flightPage(rows), { status: 200, headers: { 'content-type': 'text/html' } });
     }

@@ -42,10 +42,11 @@ export function registerSync(program: Command): void {
       if (opts.json) { printJson(report); return; }
       heading(`Sync ${report.ok ? 'finished' : 'finished with errors'} in ${(report.durationMs / 1000).toFixed(1)}s${report.dryRun ? ' (dry run)' : ''}`);
       table(Object.entries(report.perSource).map(([source, s]) => ({ source, ...s })));
-      info(`${report.totals.active} active · ${report.totals.detailFetches} detail fetches`);
+      info(`${report.totals.active} active · ${report.totals.detailFetches} detail fetches${report.warnings.length ? ` · ${report.warnings.length} warning(s)` : ''}`);
       for (const l of report.added) ok(`added   ${l.title} ${formatPrice(l.price)}`);
       for (const p of report.priceDrops) info(`price   ${p.listing.title} ${formatPrice(p.from)} → ${formatPrice(p.to)}`);
       for (const g of report.gone) warn(`${g.status.padEnd(7)} ${g.listing.title}`);
+      for (const w of report.warnings) warn(w);
       for (const e of report.errors) fail(e);
       if (!report.ok) process.exitCode = 1;
     });

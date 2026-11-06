@@ -59,7 +59,6 @@ export const ConfigSchema = z.object({
   digest: z.object({
     enabled: z.boolean().default(true),
     cron: z.string().default('0 14 * * *'),
-    timezone: z.string().default('America/Denver'),
   }),
 });
 export type Config = z.infer<typeof ConfigSchema>;

@@ -30,11 +30,14 @@ export interface SyncReport {
   ok: boolean;
   dryRun: boolean;
   perSource: Record<string, Record<string, number>>;
-  totals: { active: number; added: number; updated: number; gone: number; detailFetches: number; errors: number };
+  totals: { active: number; added: number; updated: number; gone: number; detailFetches: number; errors: number; warnings: number };
   added: Listing[];
   gone: { listing: Listing; status: ListingStatus }[];
   priceDrops: { listing: Listing; from: number | null; to: number | null }[];
+  /** A source failed entirely (its previous inventory was kept). Makes `ok` false and the CLI exit non-zero. */
   errors: string[];
+  /** Per-listing problems (detail fetch or gone check failed); data was still written. */
+  warnings: string[];
 }
 
 export async function runSync(config: Config, opts: SyncOptions): Promise<SyncReport> {
@@ -45,7 +48,7 @@ export async function runSync(config: Config, opts: SyncOptions): Promise<SyncRe
   const archive = loadArchive();
   const report: SyncReport = {
     startedAt, finishedAt: startedAt, durationMs: 0, ok: true, dryRun: Boolean(opts.dryRun), perSource: {},
-    totals: { active: 0, added: 0, updated: 0, gone: 0, detailFetches: 0, errors: 0 }, added: [], gone: [], priceDrops: [], errors: [],
+    totals: { active: 0, added: 0, updated: 0, gone: 0, detailFetches: 0, errors: 0, warnings: 0 }, added: [], gone: [], priceDrops: [], errors: [], warnings: [],
   };
   const nextActive: Listing[] = [];
   const nextArchive: Listing[] = [...archive.listings];
@@ -81,11 +84,10 @@ export async function runSync(config: Config, opts: SyncOptions): Promise<SyncRe
           continue;
         } catch (err) {
           slog.warn('detail fetch failed; using summary', { id: s.id, ...errorData(err) });
-          report.errors.push(`${source.name}:${s.id}: ${(err as Error).message}`);
+          report.warnings.push(`${source.name}:${s.id}: ${(err as Error).message}`);
         }
       }
-      // Keep the rich fields we already have; refresh the cheap ones from the summary.
-      fresh.push(before ? { ...before, ...s.partial, description: before.description || s.partial.description, options: before.options.length ? before.options : s.partial.options, photos: s.partial.photos.length > before.photos.length ? s.partial.photos : before.photos, detailFetchedAt: before.detailFetchedAt } : s.partial);
+      fresh.push(before ? refreshFromSummary(before, s.partial) : s.partial);
     }
     report.totals.detailFetches += fetched;
 
@@ -93,9 +95,13 @@ export async function runSync(config: Config, opts: SyncOptions): Promise<SyncRe
     for (const l of current) {
       if (summaries.some((s) => s.id === l.id)) continue;
       try { goneStatus.set(l.id, await source.resolveGone(l)); }
-      catch (err) { slog.warn('resolveGone failed, assuming sold', { id: l.id, ...errorData(err) }); goneStatus.set(l.id, 'sold'); }
+      catch (err) {
+        slog.warn('resolveGone failed; keeping listing until the next run', { id: l.id, ...errorData(err) });
+        report.warnings.push(`${source.name}:${l.id}: gone check failed: ${(err as Error).message}`);
+        goneStatus.set(l.id, 'active');
+      }
     }
-    const changes = mergeSnapshot(current, fresh, (l) => goneStatus.get(l.id) ?? 'sold', now());
+    const changes = mergeSnapshot(current, fresh, (l) => goneStatus.get(l.id) ?? 'active', now());
     report.perSource[source.name] = summarizeChanges(changes);
     collect(report, changes);
     nextActive.push(...applyChanges(changes));
@@ -107,27 +113,55 @@ export async function runSync(config: Config, opts: SyncOptions): Promise<SyncRe
   const handled = new Set(opts.sources.map((s) => s.name));
   nextActive.push(...inventory.listings.filter((l) => !handled.has(l.source)));
 
+  // A car that came back under the same id lives in inventory only, never in both files.
+  const activeIds = new Set(nextActive.map((l) => l.id));
+  const archived = nextArchive.filter((l) => !activeIds.has(l.id));
+
   report.totals.active = nextActive.length;
   report.totals.errors = report.errors.length;
+  report.totals.warnings = report.warnings.length;
   report.ok = report.errors.length === 0;
   report.finishedAt = now();
   report.durationMs = Date.now() - t0;
 
   if (!opts.dryRun) {
     writeInventoryFile(PATHS.inventory, { version: 1, syncedAt: report.finishedAt, listings: nextActive });
-    writeInventoryFile(PATHS.archive, { version: 1, syncedAt: report.finishedAt, listings: nextArchive });
-    logger.info('inventory written', { active: nextActive.length, archived: nextArchive.length });
+    writeInventoryFile(PATHS.archive, { version: 1, syncedAt: report.finishedAt, listings: archived });
+    logger.info('inventory written', { active: nextActive.length, archived: archived.length });
   } else {
     logger.info('dry run: nothing written', report.totals);
   }
 
   const changed = report.totals.added + report.totals.updated + report.totals.gone > 0;
   if (opts.notify !== false && !opts.dryRun) {
-    await postJobEvent(config, 'sync', report.ok ? 'ok' : 'error', { ...report.totals, perSource: report.perSource, durationMs: report.durationMs, errors: report.errors.slice(0, 5) });
+    await postJobEvent(config, 'sync', report.ok ? 'ok' : 'error', { ...report.totals, perSource: report.perSource, durationMs: report.durationMs, errors: report.errors.slice(0, 5), warnings: report.warnings.slice(0, 5) });
     const mode = config.sync.notify;
     if (mode === 'always' || (mode === 'changes' && (changed || !report.ok))) await notifySync(config, report);
   }
   return report;
+}
+
+/**
+ * A listing we already hold details for was seen again on the search page but needs no
+ * re-fetch. Search rows carry only a handful of fields, so keep everything from `before`
+ * and refresh just what the row reliably reports; empty/null row values never win.
+ */
+export function refreshFromSummary(before: Listing, summary: Listing): Listing {
+  return {
+    ...before,
+    title: summary.title || before.title,
+    price: summary.price,
+    mileage: summary.mileage ?? before.mileage,
+    condition: summary.condition || before.condition,
+    photos: before.photos.length ? before.photos : summary.photos,
+    sourceStats: {
+      pageViews: summary.sourceStats.pageViews ?? before.sourceStats.pageViews,
+      favorites: summary.sourceStats.favorites ?? before.sourceStats.favorites,
+    },
+    sourceUpdatedAt: summary.sourceUpdatedAt ?? before.sourceUpdatedAt,
+    sourceExpiresAt: summary.sourceExpiresAt ?? before.sourceExpiresAt,
+    lastSeenAt: summary.lastSeenAt,
+  };
 }
 
 function collect(report: SyncReport, c: SyncChanges): void {
@@ -149,6 +183,7 @@ export function formatSyncMessage(config: Config, r: SyncReport): string {
   for (const g of r.gone) lines.push(`${g.status === 'sold' ? '✅ Sold' : '🚫 ' + g.status}: ${esc(g.listing.title)} · ${formatPrice(g.listing.price)} · ${daysBetween(g.listing.firstSeenAt, g.listing.soldAt ?? r.finishedAt)} days on site`);
   if (r.added.length + r.priceDrops.length + r.gone.length === 0) lines.push('No changes.');
   if (r.errors.length) lines.push(`\n⚠️ ${r.errors.length} error(s):\n` + r.errors.slice(0, 3).map((e) => `• ${esc(e)}`).join('\n'));
+  if (r.warnings.length) lines.push(`\n${r.warnings.length} warning(s):\n` + r.warnings.slice(0, 3).map((e) => `• ${esc(e)}`).join('\n'));
   return lines.join('\n');
 }
 

@@ -59,7 +59,6 @@
   },
   "digest": {
     "enabled": true,
-    "cron": "0 14 * * *",
-    "timezone": "America/Denver"
+    "cron": "0 14 * * *"
   }
 }

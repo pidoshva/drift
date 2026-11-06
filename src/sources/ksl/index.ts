@@ -71,21 +71,30 @@ export class KslSource implements InventorySource {
     };
   }
 
+  /**
+   * A listing dropped off the dealer's search page. Only a confirmed non-Active status or a
+   * 404/410 archives it; anything unresolved (rate limit, outage, layout change) keeps the car
+   * so a KSL hiccup never removes inventory. The next run re-checks it.
+   */
   async resolveGone(listing: Listing): Promise<ListingStatus> {
+    const pastExpiry = Boolean(listing.sourceExpiresAt && Date.parse(listing.sourceExpiresAt) < Date.now());
     try {
       const html = await this.opts.client.getHtml(listing.url);
       const raw = parseDetailPage(html);
       const status = kslStatus(raw).toLowerCase();
       this.logger.debug('gone check', { id: listing.id, status });
-      if (status === 'active') return 'active'; // search glitch; keep it
+      if (status === 'active') return 'active';
       if (status.includes('sold')) return 'sold';
       if (status.includes('expire')) return 'expired';
-      return 'sold';
+      if (!status) {
+        this.logger.warn('gone check: page has no status; keeping listing', { id: listing.id });
+        return 'active';
+      }
+      return pastExpiry ? 'expired' : 'sold';
     } catch (err) {
-      if (err instanceof HttpStatusError && (err.status === 404 || err.status === 410)) return 'sold';
-      if (listing.sourceExpiresAt && Date.parse(listing.sourceExpiresAt) < Date.now()) return 'expired';
-      this.logger.warn('could not resolve gone listing, assuming sold', { id: listing.id, error: String(err) });
-      return 'sold';
+      if (err instanceof HttpStatusError && (err.status === 404 || err.status === 410)) return pastExpiry ? 'expired' : 'sold';
+      this.logger.warn('gone check failed; keeping listing until the next run', { id: listing.id, error: String(err) });
+      return 'active';
     }
   }
 }

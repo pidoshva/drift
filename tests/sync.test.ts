@@ -28,6 +28,12 @@ disableLogFile();
 setLogLevel('error');
 const config = loadConfig();
 const ksl = (opts: Parameters<typeof createMockKslFetch>[0] = {}) => new KslSource({ memberId: 'mock', maxPages: 10, client: new KslClient({ delayMs: 0, fetchImpl: createMockKslFetch({ ...opts, perPage: 5 }) }) });
+/** Mock KSL where the detail page of `id` answers with `status` instead of a listing page. */
+const kslWithBrokenDetail = (id: string, status: number, opts: Parameters<typeof createMockKslFetch>[0] = {}) => {
+  const base = createMockKslFetch({ ...opts, perPage: 5 });
+  const fetchImpl: typeof fetch = async (input, init) => (String(input).endsWith(`/listing/${id}`) ? new Response('nope', { status }) : base(input, init));
+  return new KslSource({ memberId: 'mock', maxPages: 10, client: new KslClient({ delayMs: 0, maxRetries: 0, fetchImpl }) });
+};
 
 beforeEach(() => { rmSync(tmp, { recursive: true, force: true }); mkdirSync(join(tmp, 'manual'), { recursive: true }); });
 afterEach(() => rmSync(tmp, { recursive: true, force: true }));
@@ -43,13 +49,62 @@ describe('runSync with mock KSL', () => {
     expect(inv.listings.every((l) => l.priceHistory.length === 1)).toBe(true);
   });
 
-  it('second run is idempotent and fetches no details', async () => {
+  it('second run is idempotent, fetches no details and keeps every detail-only field', async () => {
     await runSync(config, { sources: [ksl()], notify: false });
-    const before = readFileSync(join(tmp, 'inventory.json'), 'utf8');
+    const before = loadInventory().listings;
     const r = await runSync(config, { sources: [ksl()], notify: false });
-    expect(r.totals).toMatchObject({ added: 0, updated: 0, gone: 0, detailFetches: 0 });
-    const after = JSON.parse(readFileSync(join(tmp, 'inventory.json'), 'utf8'));
-    expect(after.listings.map((l: { id: string; hash: string }) => l.id + l.hash)).toEqual(JSON.parse(before).listings.map((l: { id: string; hash: string }) => l.id + l.hash));
+    expect(r.ok).toBe(true);
+    expect(r.totals).toMatchObject({ added: 0, updated: 0, gone: 0, detailFetches: 0, warnings: 0 });
+    const after = loadInventory().listings;
+    expect(after.map((l) => l.id + l.hash)).toEqual(before.map((l) => l.id + l.hash));
+    for (const l of after) {
+      const b = before.find((x) => x.id === l.id)!;
+      expect(l.description).toBe(b.description);
+      expect(l.options).toEqual(b.options);
+      expect(l.photos).toEqual(b.photos);
+      expect(l.detailFetchedAt).toBe(b.detailFetchedAt);
+      expect(l.sourceStats.pageViews).toBe(b.sourceStats.pageViews);
+      expect(l.sourceUpdatedAt).toBe(b.sourceUpdatedAt);
+      for (const f of ['vin', 'body', 'transmission', 'fuel', 'drive', 'stockNumber', 'carfaxUrl', 'exteriorColor', 'titleType'] as const) {
+        expect(b[f], `${l.id}.${f} should be seeded`).not.toBe('');
+        expect(l[f], `${l.id}.${f}`).toBe(b[f]);
+      }
+    }
+  });
+
+  it('a car that comes back after being archived lives in inventory only', async () => {
+    await runSync(config, { sources: [ksl()], notify: false });
+    await runSync(config, { sources: [ksl({ sold: ['90000100'] })], notify: false });
+    expect(loadArchive().listings.map((l) => l.id)).toEqual(['90000100']);
+    const r = await runSync(config, { sources: [ksl()], notify: false });
+    expect(r.totals).toMatchObject({ active: 14, added: 1, gone: 0 });
+    expect(loadArchive().listings).toEqual([]);
+    expect(loadInventory().listings.find((l) => l.id === '90000100')).toMatchObject({ status: 'active', soldAt: null });
+  });
+
+  it('keeps a car whose gone check fails (503) and archives it on 404', async () => {
+    await runSync(config, { sources: [ksl()], notify: false });
+    const r1 = await runSync(config, { sources: [kslWithBrokenDetail('90000100', 503, { sold: ['90000100'] })], notify: false });
+    expect(r1.ok).toBe(true);
+    expect(r1.totals).toMatchObject({ active: 14, gone: 0 });
+    expect(r1.perSource.ksl).toMatchObject({ missing: 1 });
+    expect(loadInventory().listings.find((l) => l.id === '90000100')!.status).toBe('active');
+    const r2 = await runSync(config, { sources: [kslWithBrokenDetail('90000100', 404, { sold: ['90000100'] })], notify: false });
+    expect(r2.gone.map((g) => [g.listing.id, g.status])).toEqual([['90000100', 'sold']]);
+    expect(loadInventory().listings).toHaveLength(13);
+  });
+
+  it('a failed detail fetch is a warning, not an error: the summary is kept and ok stays true', async () => {
+    const r = await runSync(config, { sources: [kslWithBrokenDetail('90000100', 503)], notify: false });
+    expect(r.ok).toBe(true);
+    expect(r.errors).toEqual([]);
+    expect(r.warnings).toHaveLength(1);
+    expect(r.warnings[0]).toMatch(/90000100.*HTTP 503/);
+    expect(r.totals).toMatchObject({ active: 14, added: 14, detailFetches: 13, warnings: 1 });
+    const l = loadInventory().listings.find((x) => x.id === '90000100')!;
+    expect(l.detailFetchedAt).toBeNull();
+    expect(l.title).not.toBe('');
+    expect(formatSyncMessage(config, r)).toContain('1 warning(s)');
   });
 
   it('detects price drops and sold cars, moving sold ones to the archive', async () => {

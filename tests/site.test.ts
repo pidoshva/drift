@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
@@ -23,6 +23,7 @@ import { escapeHtml, html, raw } from '../src/site/templates/html.js';
 import { KslClient } from '../src/sources/ksl/client.js';
 import { KslSource } from '../src/sources/ksl/index.js';
 import { createMockKslFetch } from '../src/sources/ksl/mock.js';
+import { ManualSource } from '../src/sources/manual.js';
 
 disableLogFile(); setLogLevel('error');
 const out = join(tmp, 'dist');
@@ -72,11 +73,26 @@ describe('buildSite', () => {
     expect(readFileSync(join(out, 'sold/index.html'), 'utf8')).toContain('badge--sold');
   });
 
-  it('escapes listing content in HTML', () => {
+  it('escapes listing content in HTML', async () => {
+    const manualDir = join(data, 'manual');
+    mkdirSync(manualDir, { recursive: true });
+    const evil = '<script>alert(1)</script>';
+    writeFileSync(join(manualDir, 'evil.json'), JSON.stringify({ id: 'evil', title: `2015 Ford "Focus" ${evil}`, year: 2015, make: 'Ford', model: 'Focus', price: 9000, description: `Clean car ${evil} & more`, options: [`Sunroof ${evil}`] }));
     const config = loadConfig();
+    const r = await runSync(config, { sources: [ksl({ sold: ['90000100'] }), new ManualSource(manualDir)], notify: false });
+    expect(r.added.map((l) => l.id)).toEqual(['evil']);
     buildSite(config, { outDir: out });
-    const all = readFileSync(join(out, 'inventory/index.html'), 'utf8');
-    expect(all).not.toMatch(/<script>alert/);
+    const escaped = '&lt;script&gt;alert(1)&lt;/script&gt;';
+    const inv = readFileSync(join(out, 'inventory/index.html'), 'utf8');
+    expect(inv).toContain(escaped);
+    expect(inv).not.toContain(evil);
+    const listings = JSON.parse(readFileSync(join(out, 'api/listings.json'), 'utf8'));
+    const car = readFileSync(join(out, listings.listings.find((l: { id: string }) => l.id === 'evil').path, 'index.html'), 'utf8');
+    expect(car).toContain(escaped);
+    expect(car).not.toContain(evil);
+    expect(car).toContain('<title>');
+    rmSync(join(manualDir, 'evil.json'));
+    await runSync(config, { sources: [ksl({ sold: ['90000100'] }), new ManualSource(manualDir)], notify: false });
   });
 
   it('rewrites root links for a GitHub Pages project site', () => {
