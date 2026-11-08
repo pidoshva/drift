@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "syncedAt": "2026-11-07T21:55:11.270Z",
+  "syncedAt": "2026-11-08T22:11:38.777Z",
   "listings": [
     {
       "id": "90000102",
@@ -49,7 +49,7 @@
       },
       "status": "active",
       "firstSeenAt": "2026-11-06T19:31:11.447Z",
-      "lastSeenAt": "2026-11-07T21:55:11.269Z",
+      "lastSeenAt": "2026-11-08T22:11:38.776Z",
       "soldAt": null,
       "sourceCreatedAt": "2026-10-30T19:18:41.000Z",
       "sourceUpdatedAt": "2026-10-30T19:18:41.000Z",
@@ -64,7 +64,7 @@
           "price": 31900
         }
       ],
-      "detailFetchedAt": "2026-11-07T21:55:11.262Z",
+      "detailFetchedAt": "2026-11-08T22:11:38.771Z",
       "statusLockedAt": null,
       "hash": "782123f8b97d648e"
     },
@@ -115,7 +115,7 @@
       },
       "status": "active",
       "firstSeenAt": "2026-11-06T19:31:11.448Z",
-      "lastSeenAt": "2026-11-07T21:55:11.269Z",
+      "lastSeenAt": "2026-11-08T22:11:38.776Z",
       "soldAt": null,
       "sourceCreatedAt": "2026-10-27T19:18:41.000Z",
       "sourceUpdatedAt": "2026-10-30T19:18:41.000Z",
@@ -130,7 +130,7 @@
           "price": 25800
         }
       ],
-      "detailFetchedAt": "2026-11-07T21:55:11.263Z",
+      "detailFetchedAt": "2026-11-08T22:11:38.772Z",
       "statusLockedAt": null,
       "hash": "be369f501582631f"
     },
@@ -181,7 +181,7 @@
       },
       "status": "active",
       "firstSeenAt": "2026-11-06T19:31:11.447Z",
-      "lastSeenAt": "2026-11-07T21:55:11.269Z",
+      "lastSeenAt": "2026-11-08T22:11:38.776Z",
       "soldAt": null,
       "sourceCreatedAt": "2026-10-23T19:18:41.000Z",
       "sourceUpdatedAt": "2026-10-26T19:18:41.000Z",
@@ -196,7 +196,7 @@
           "price": 27995
         }
       ],
-      "detailFetchedAt": "2026-11-07T21:55:11.263Z",
+      "detailFetchedAt": "2026-11-08T22:11:38.772Z",
       "statusLockedAt": null,
       "hash": "2f7b57ab1bce96d9"
     },
@@ -247,7 +247,7 @@
       },
       "status": "active",
       "firstSeenAt": "2026-11-06T19:31:11.447Z",
-      "lastSeenAt": "2026-11-07T21:55:11.269Z",
+      "lastSeenAt": "2026-11-08T22:11:38.776Z",
       "soldAt": null,
       "sourceCreatedAt": "2026-10-22T19:18:41.000Z",
       "sourceUpdatedAt": "2026-10-24T19:18:41.000Z",
@@ -262,7 +262,7 @@
           "price": 21450
         }
       ],
-      "detailFetchedAt": "2026-11-07T21:55:11.262Z",
+      "detailFetchedAt": "2026-11-08T22:11:38.771Z",
       "statusLockedAt": null,
       "hash": "adcde7ebd2a0255f"
     },
@@ -313,7 +313,7 @@
       },
       "status": "active",
       "firstSeenAt": "2026-11-06T19:31:11.448Z",
-      "lastSeenAt": "2026-11-07T21:55:11.269Z",
+      "lastSeenAt": "2026-11-08T22:11:38.776Z",
       "soldAt": null,
       "sourceCreatedAt": "2026-10-11T19:18:41.000Z",
       "sourceUpdatedAt": "2026-10-11T19:18:41.000Z",
@@ -328,7 +328,7 @@
           "price": 19450
         }
       ],
-      "detailFetchedAt": "2026-11-07T21:55:11.265Z",
+      "detailFetchedAt": "2026-11-08T22:11:38.773Z",
       "statusLockedAt": null,
       "hash": "eb0f328642538137"
     },
@@ -380,7 +380,7 @@
       },
       "status": "active",
       "firstSeenAt": "2026-11-06T19:31:11.450Z",
-      "lastSeenAt": "2026-11-07T21:55:11.269Z",
+      "lastSeenAt": "2026-11-08T22:11:38.776Z",
       "soldAt": null,
       "sourceCreatedAt": "2026-10-08T19:18:41.000Z",
       "sourceUpdatedAt": "2026-10-11T19:18:41.000Z",
@@ -395,7 +395,7 @@
           "price": 23995
         }
       ],
-      "detailFetchedAt": "2026-11-07T21:55:11.267Z",
+      "detailFetchedAt": "2026-11-08T22:11:38.775Z",
       "statusLockedAt": null,
       "hash": "d88efc06ad77dc51"
     },
@@ -448,7 +448,7 @@
       },
       "status": "active",
       "firstSeenAt": "2026-11-06T19:31:11.451Z",
-      "lastSeenAt": "2026-11-07T21:55:11.269Z",
+      "lastSeenAt": "2026-11-08T22:11:38.776Z",
       "soldAt": null,
       "sourceCreatedAt": "2026-10-03T19:18:41.000Z",
       "sourceUpdatedAt": "2026-10-03T19:18:41.000Z",
@@ -463,7 +463,7 @@
           "price": 29800
         }
       ],
-      "detailFetchedAt": "2026-11-07T21:55:11.268Z",
+      "detailFetchedAt": "2026-11-08T22:11:38.775Z",
       "statusLockedAt": null,
       "hash": "083125a8fdd7736b"
     },
@@ -515,7 +515,7 @@
       },
       "status": "active",
       "firstSeenAt": "2026-11-06T19:31:11.448Z",
-      "lastSeenAt": "2026-11-07T21:55:11.269Z",
+      "lastSeenAt": "2026-11-08T22:11:38.776Z",
       "soldAt": null,
       "sourceCreatedAt": "2026-09-27T19:18:41.000Z",
       "sourceUpdatedAt": "2026-09-30T19:18:41.000Z",
@@ -530,7 +530,7 @@
           "price": 26500
         }
       ],
-      "detailFetchedAt": "2026-11-07T21:55:11.264Z",
+      "detailFetchedAt": "2026-11-08T22:11:38.773Z",
       "statusLockedAt": null,
       "hash": "4988a594dbfd36b5"
     },
@@ -580,7 +580,7 @@
       },
       "status": "active",
       "firstSeenAt": "2026-11-06T19:31:11.446Z",
-      "lastSeenAt": "2026-11-07T21:55:11.269Z",
+      "lastSeenAt": "2026-11-08T22:11:38.776Z",
       "soldAt": null,
       "sourceCreatedAt": "2026-09-23T19:18:41.000Z",
       "sourceUpdatedAt": "2026-09-24T19:18:41.000Z",
@@ -595,7 +595,7 @@
           "price": 38995
         }
       ],
-      "detailFetchedAt": "2026-11-07T21:55:11.261Z",
+      "detailFetchedAt": "2026-11-08T22:11:38.771Z",
       "statusLockedAt": null,
       "hash": "35dbabe3b40fe01d"
     },
@@ -645,7 +645,7 @@
       },
       "status": "active",
       "firstSeenAt": "2026-11-06T19:31:11.451Z",
-      "lastSeenAt": "2026-11-07T21:55:11.269Z",
+      "lastSeenAt": "2026-11-08T22:11:38.776Z",
       "soldAt": null,
       "sourceCreatedAt": "2026-09-21T19:18:41.000Z",
       "sourceUpdatedAt": "2026-09-24T19:18:41.000Z",
@@ -660,7 +660,7 @@
           "price": 31500
         }
       ],
-      "detailFetchedAt": "2026-11-07T21:55:11.268Z",
+      "detailFetchedAt": "2026-11-08T22:11:38.776Z",
       "statusLockedAt": null,
       "hash": "6f142b004d2c07c3"
     },
@@ -710,7 +710,7 @@
       },
       "status": "active",
       "firstSeenAt": "2026-11-06T19:31:11.450Z",
-      "lastSeenAt": "2026-11-07T21:55:11.269Z",
+      "lastSeenAt": "2026-11-08T22:11:38.776Z",
       "soldAt": null,
       "sourceCreatedAt": "2026-09-17T19:18:41.000Z",
       "sourceUpdatedAt": "2026-09-17T19:18:41.000Z",
@@ -725,7 +725,7 @@
           "price": 24900
         }
       ],
-      "detailFetchedAt": "2026-11-07T21:55:11.266Z",
+      "detailFetchedAt": "2026-11-08T22:11:38.774Z",
       "statusLockedAt": null,
       "hash": "4ddc25999f5047cd"
     },
@@ -776,7 +776,7 @@
       },
       "status": "active",
       "firstSeenAt": "2026-11-06T19:31:11.450Z",
-      "lastSeenAt": "2026-11-07T21:55:11.269Z",
+      "lastSeenAt": "2026-11-08T22:11:38.776Z",
       "soldAt": null,
       "sourceCreatedAt": "2026-09-05T19:18:41.000Z",
       "sourceUpdatedAt": "2026-09-08T19:18:41.000Z",
@@ -791,7 +791,7 @@
           "price": 12995
         }
       ],
-      "detailFetchedAt": "2026-11-07T21:55:11.267Z",
+      "detailFetchedAt": "2026-11-08T22:11:38.775Z",
       "statusLockedAt": null,
       "hash": "39ac558a901bff56"
     },
@@ -843,7 +843,7 @@
       },
       "status": "active",
       "firstSeenAt": "2026-11-06T19:31:11.451Z",
-      "lastSeenAt": "2026-11-07T21:55:11.269Z",
+      "lastSeenAt": "2026-11-08T22:11:38.776Z",
       "soldAt": null,
       "sourceCreatedAt": "2026-09-02T19:18:41.000Z",
       "sourceUpdatedAt": "2026-09-05T19:18:41.000Z",
@@ -858,7 +858,7 @@
           "price": 28750
         }
       ],
-      "detailFetchedAt": "2026-11-07T21:55:11.269Z",
+      "detailFetchedAt": "2026-11-08T22:11:38.776Z",
       "statusLockedAt": null,
       "hash": "e599a859659ddb13"
     },
@@ -909,7 +909,7 @@
       },
       "status": "active",
       "firstSeenAt": "2026-11-06T19:31:11.451Z",
-      "lastSeenAt": "2026-11-07T21:55:11.269Z",
+      "lastSeenAt": "2026-11-08T22:11:38.776Z",
       "soldAt": null,
       "sourceCreatedAt": "2026-08-30T19:18:41.000Z",
       "sourceUpdatedAt": "2026-09-02T19:18:41.000Z",
@@ -924,7 +924,7 @@
           "price": 9800
         }
       ],
-      "detailFetchedAt": "2026-11-07T21:55:11.268Z",
+      "detailFetchedAt": "2026-11-08T22:11:38.776Z",
       "statusLockedAt": null,
       "hash": "4ee1784df0386966"
     }
